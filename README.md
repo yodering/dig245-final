@@ -117,7 +117,7 @@ In groups, brainstorm on your topic(s) use the <a href="https://omundy.github.io
 
 ## 2 - Proposal
 
-Create a pitch deck (10-15 slide Google Presentation) to share and plan your project that contains:
+Create a pitch deck (10-15 slide **Google Presentation**)* to share and plan your project that contains:
 
 1. A one paragraph introduction to your concept and what you plan to make. Who will use this and why?
 1. An initial attempt at an [identity](https://docs.google.com/presentation/d/1exnY8fjVsOc3bKZFESJIM2s4JKxhqg_oASPDPokSfrE/edit?usp=sharing) (e.g. a logo, word mark, style guide, etc.).
@@ -125,6 +125,8 @@ Create a pitch deck (10-15 slide Google Presentation) to share and plan your pro
 1. Flowcharts (2–3) showing each step users see, and another [showing how data works](https://www.google.com/search?q=a+flowchart+that+tracks+data+through+the+app&safe=off&tbm=isch) in the app
 1. [Wireframes](https://www.dreamhost.com/blog/how-to-wireframe-website/) showing all the views in the interface (introduction page, forms, results page)
 1. Technology - Include [pseudocode](https://en.wikipedia.org/wiki/Pseudocode) of the main logic of your project. List technologies and demos you think you will need. List the "**unknowns**"—parts of your idea that you don't know yet how to execute.
+
+
 
 
 
@@ -161,9 +163,9 @@ Create a pitch deck (10-15 slide Google Presentation) to share and plan your pro
 Create a working “proof of concept” of your app.
 
 1. Your prototype should contain the essential functions of your project.
-1. Your work should be live (not public, just able to be shared via a link in Slack)
+1. Your work should be live (able to be shared via a link in Slack)
 1. Feel free to fork and use any example repository from class to get started.
-
+1. [Save and refresh](https://github.com/omundy/learn-computing/blob/main/topics-keyboard-shortcuts.md#web-development-edit-save-refresh-loop) your work in the browser often to see your changes. Commit changes regularly.
 
 <details>
 <summary>In-class activity</summary>
@@ -203,20 +205,11 @@ Share your iterations to get feedback before coding the final design.
 
 
 
-## 5 - Deliverables
+## 5 - Design + Prototype
 
-Your finished project should include:
 
-1. The Project:
-    1. Intro page: A well-designed, but simple page that contextualizes your project. It could appear as an introduction to the project or provided at the end to explain what happened.
-    1. Your coded design (valid [HTML](https://validator.w3.org/) and [CSS](https://jigsaw.w3.org/css-validator/)) combined with your prototype in a final application.
-    1. The project should be live, hosted on Github Pages, Heroku, or your own server.
-1. Documentation:
-    1. A presentation (update your original proposal with screenshots, text, flowcharts, etc.) to document and share your finished project.
-    1. A video (1:30 max) in case your site breaks 😳
-    1. A 200–300 word statement explaining your concept and execution. This can be posted in Moodle, or included somehow in the actual project (e.g. the Intro page).
-    1. See more about [documentation](https://omundy.github.io/learn-computing/slides/documentation.html)
-
+1. Combine your coded design and prototype
+1. Your project should be 95% complete
 
 <!--
 Examples:
@@ -237,12 +230,28 @@ We will share final projects in <a href="https://en.wikipedia.org/wiki/Lightning
 
 
 
-## 6 - Publish
+## 6 - Deliverables
 
-1. [Save and refresh](https://github.com/omundy/learn-computing/blob/main/topics-keyboard-shortcuts.md#web-development-edit-save-refresh-loop) your work in the browser often to see your changes.
-1. Commit changes regularly.
-1. Confirm valid [HTML](https://validator.w3.org/) and [CSS](https://jigsaw.w3.org/css-validator/) <sup>([?](https://github.com/omundy/dig245-critical-web-design/blob/main/topics/html-css/css.md#css-validation))</sup>
-1. When finished, [push, publish, and post your project](https://docs.google.com/document/d/17U_zmzM_eML_qkG0PaOdDRcEk3YEmbiQ1TyNnbAM08k/edit#bookmark=id.8jryplv1i8a). Make sure to include a link to your Figma designs in the Moodle post.
+Your finished project should include:
+
+#### The Project
+
+1. Intro page: A well-designed, but simple page that contextualizes your project. It could appear as an introduction to the project or provided at the end to explain what happened.
+1. Your coded design (valid [HTML](https://validator.w3.org/) and [CSS](https://jigsaw.w3.org/css-validator/) <sup>([?](https://github.com/omundy/dig245-critical-web-design/blob/main/topics/html-css/css.md#css-validation))</sup>) combined with your prototype in a final application.
+1. The project should be live, hosted on Github Pages, Vercel, or your own server.
+
+#### Documentation
+
+1. A presentation (update your original proposal with screenshots, text, flowcharts, etc.) to document and share your finished project.
+1. A video (1:30 max) in case your site breaks 😳
+1. A 200–300 word statement explaining your concept and execution. This can be posted in Moodle, or included somehow in the actual project (e.g. the Intro page).
+1. See more about [documentation](https://omundy.github.io/learn-computing/slides/documentation.html)
+
+
+#### Moodle Post
+
+1. When finished, [push, publish, and post your project](https://docs.google.com/document/d/17U_zmzM_eML_qkG0PaOdDRcEk3YEmbiQ1TyNnbAM08k/edit#bookmark=id.8jryplv1i8a).
+1. Post links to all your deliverables (including your Figma designs) in Moodle.
 
 
 
