@@ -186,7 +186,7 @@ In groups, share your prototypes to get feedback:
 Design iterations of main views.
 
 1. The design should reflect the overall concept and goals of your project.
-1. Create your design iterations with [Figma](https://figma.com), or use the Bootstrap template included in this repo `designs/1.psd`.
+1. Create your design iterations with [Figma](https://figma.com), or use the Bootstrap template included in this repo `designs/1.psd`. **Show your work!** Do not delete previous versions—we want to see your progress as you iterate and improve your designs.
 1. Create multiple iterations of each different page / view your app.
 1. As per class [presentations](https://docs.google.com/presentation/d/1BiIHVEQjmIb2k2vB6N3x1g_S3KSLyZq2YCniq1ONjg8/edit?usp=sharing), look at relevant examples of good design to help you improve your own, then experiment and iterate!
 
@@ -242,20 +242,32 @@ Your finished project should include:
 
 #### Documentation
 
-1. A presentation (update your original proposal with screenshots, text, flowcharts, etc.) to document and share your finished project.
-1. A video (1:30 max) in case your site breaks 😳
+1. A Google Presentation (update your original proposal with screenshots, text, flowcharts, etc.) to document and share your finished project.
+1. A screencast video taken on your computer (do not use a cell phone!) (1:30 max) in case your site breaks 😳 (see [tips](https://omundy.github.io/learn-computing/slides/documentation.html))
 1. A 200–300 word statement explaining your concept and execution. This can be posted in Moodle, or included somehow in the actual project (e.g. the Intro page).
-1. See more about [documentation](https://omundy.github.io/learn-computing/slides/documentation.html)
+1. A link to (all of) your Figma layouts
 
 
 #### Moodle Post
 
 1. When finished, [push, publish, and post your project](https://docs.google.com/document/d/17U_zmzM_eML_qkG0PaOdDRcEk3YEmbiQ1TyNnbAM08k/edit#bookmark=id.8jryplv1i8a).
-1. Post links to all your deliverables (including your Figma designs) in Moodle.
+1. Post links to all your deliverables in Moodle.
 
 
 
+<!-- 
 
+EXAMPLES
+
+https://anclaire.github.io/dig245-final/home.html
+https://limilano.github.io/dig245-final/
+https://katehynes.github.io/dig245-final/
+https://zoearen.github.io/dig245-final/
+https://skyyylaw.github.io/dig245-final/
+https://cha1hee.github.io/dig245-final/
+https://casigl.github.io/dig245-final/ - not functional
+
+-->
 
 
 
