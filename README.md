@@ -80,7 +80,7 @@ Fork this repository and clone it to your `critical-web-design` folder on your m
 
 -->
 
-![flowchart](assets/img/development-flowchart.svg)
+![flowchart](assets/img/5.2-design-prototype-separation.png)
 
 
 ## 1 - Concept
