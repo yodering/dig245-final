@@ -1,7 +1,12 @@
 
 # DIG 245 Final Project
 
+
+
+## Introduction
+
 Design and program a web application as a creative response to content from the course.
+
 
 <details>
 <summary>Learning Objectives</summary>
@@ -30,7 +35,6 @@ Complete the following to prepare for this assignment. See [Resources](#resource
 <details>
 <summary>Rubric</summary>
 
-
 The final grade incorporates preparation scores with the final score ([rubric](https://docs.google.com/document/d/1gqAB_AHkMC6uKr_1uP9JzPwWclABw1RAB7KwEgAQSds/edit)).
 
 ```js
@@ -43,11 +47,7 @@ let grade = milestones + (deliverables * 0.8);
 
 
 
-
-
-
 ## About
-
 
 We’ve examined several issues around design and the internet this semester. Some forms are easy to identify, like how dark patterns manipulate user experiences by affecting usability and user expectations. Others, like the relationship between the surveillance economy and social justice are harder to visualize, but equally important when we consider whether the internet is or is not a positive force in society.
 
@@ -58,19 +58,9 @@ Your application will consist of HTML, CSS, Javascript, and any additional libra
 
 
 
+## Setup
 
-
-
-
-
-
-
-
-## Instructions
-
-Fork this repository and clone it to your `critical-web-design` folder on your machine.
-
-
+[Fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo#forking-a-repository) this repository and [clone](https://docs.github.com/en/get-started/quickstart/fork-a-repo#cloning-your-forked-repository) it to your machine.
 
 
 
@@ -250,10 +240,7 @@ Your finished project should include:
 
 #### Moodle Post
 
-1. When finished, [push, publish, and post your project](https://docs.google.com/document/d/17U_zmzM_eML_qkG0PaOdDRcEk3YEmbiQ1TyNnbAM08k/edit#bookmark=id.8jryplv1i8a).
-1. Post links to all your deliverables in Moodle.
-
-
+1. When finished, push, publish, and post all deliverables to Moodle per documentation in the Assignments.
 
 <!-- 
 
@@ -275,3 +262,4 @@ https://casigl.github.io/dig245-final/ - not functional
 ## Resources
 
 - Course references [HTML](https://github.com/omundy/dig245-critical-web-design/blob/main/topics/html-css/html.md), [CSS](https://github.com/omundy/dig245-critical-web-design/blob/main/topics/html-css/css.md), and [JS](https://github.com/omundy/dig245-critical-web-design/blob/main/topics/javascript/javascript.md)
+- [Mozilla Developer Guide](https://developer.mozilla.org/en-US/docs/Web/Guide)
