@@ -60,7 +60,7 @@ Your application will consist of HTML, CSS, Javascript, and any additional libra
 
 ## Setup
 
-[Fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo#forking-a-repository) this repository and [clone](https://docs.github.com/en/get-started/quickstart/fork-a-repo#cloning-your-forked-repository) it to your machine.
+[Fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo#forking-a-repository) this repository and [clone](https://docs.github.com/en/get-started/quickstart/fork-a-repo#cloning-your-forked-repository) it to your machine. 
 
 
 
@@ -71,6 +71,9 @@ Your application will consist of HTML, CSS, Javascript, and any additional libra
 -->
 
 ![flowchart](assets/img/5.2-design-prototype-separation.png)
+
+<small>The following steps are represented in this diagram.</small>
+
 
 
 ## 1 - Concept
@@ -246,11 +249,14 @@ Your finished project should include:
 
 EXAMPLES
 
-https://anclaire.github.io/dig245-final/home.html
+2022
 https://limilano.github.io/dig245-final/
 https://katehynes.github.io/dig245-final/
 https://zoearen.github.io/dig245-final/
 https://skyyylaw.github.io/dig245-final/
+
+2021
+https://anclaire.github.io/dig245-final/home.html
 https://cha1hee.github.io/dig245-final/
 https://casigl.github.io/dig245-final/ - not functional
 
