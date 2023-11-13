@@ -40,7 +40,7 @@ async function handleArtistData() {
             getRandomSongs(token, artistId);
             displayArtistImage(token, artistId);
         } else {
-            console.error('Error fetching artist data');
+            return null;
         }
     }
 }
@@ -57,7 +57,7 @@ async function getRandomSongs(token, artistId) {
         const randomSongs = getRandomElements(topTracksData.tracks, 5);
         displayRandomSongs(randomSongs);
     } else {
-        console.error('Error fetching top tracks');
+        return null;
     }
 }
 
@@ -97,6 +97,6 @@ async function displayArtistImage(token, artistId) {
         imageDiv.innerHTML = ''; // clear previous images
         imageDiv.appendChild(img);
     } else {
-        console.error('Error fetching artist image');
+        return null;
     }
 }
