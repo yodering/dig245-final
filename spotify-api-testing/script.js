@@ -1,5 +1,5 @@
-const clientId = 'faf27542287147d1adc2cfd7f72763ef'; // api client id
-const clientSecret = 'ed2ae0fa7d99436d9c5cd5d11243f00c'; // api client secret
+const string1 = 'faf27542287147d1adc2cfd7f72763ef'; // api client id
+const string2 = 'ed2ae0fa7d99436d9c5cd5d11243f00c'; // api client secret
 
 
 document.getElementById('getSongs').addEventListener('click', getRandomSongs);
@@ -8,7 +8,7 @@ async function getAccessToken() {
     const response = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
         headers: {
-            'Authorization': 'Basic ' + btoa(clientId + ':' + clientSecret),
+            'Authorization': 'Basic ' + btoa(string1 + ':' + string2),
             'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: 'grant_type=client_credentials'
