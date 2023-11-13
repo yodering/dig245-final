@@ -1,7 +1,26 @@
 const clientId = 'faf27542287147d1adc2cfd7f72763ef'; // api client id
 const clientSecret = 'ed2ae0fa7d99436d9c5cd5d11243f00c'; // api client secret
 
-document.getElementById('getRandomSongsBtn').addEventListener('click', getRandomSongs);
+
+document.getElementById('getSongs').addEventListener('click', getRandomSongs);
+
+async function getAccessToken() {
+    const response = await fetch('https://accounts.spotify.com/api/token', {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Basic ' + btoa(clientId + ':' + clientSecret),
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'grant_type=client_credentials'
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        return data.access_token;
+    } else {
+        return null;
+    }
+}
 
 async function getRandomSongs() {
     const artist = document.getElementById('artistInput').value;
@@ -28,32 +47,14 @@ async function getRandomSongs() {
                 const randomSongs = getRandomElements(topTracksData.tracks, 5);
                 displayRandomSongs(randomSongs);
             } else {
-                console.error('Error fetching top tracks:', topTracks.status);
+                return null;
             }
         } else {
-            console.error('Error fetching artist:', response.status);
+            return null;
         }
     }
 }
 
-async function getAccessToken() {
-    const response = await fetch('https://accounts.spotify.com/api/token', {
-        method: 'POST',
-        headers: {
-            'Authorization': 'Basic ' + btoa(clientId + ':' + clientSecret),
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: 'grant_type=client_credentials'
-    });
-
-    if (response.ok) {
-        const data = await response.json();
-        return data.access_token;
-    } else {
-        console.error('Error fetching access token:', response.status);
-        return null;
-    }
-}
 
 function getRandomElements(array, numElements) {
     const shuffledArray = array.sort(() => Math.random() - 0.5);
