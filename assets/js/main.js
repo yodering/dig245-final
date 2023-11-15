@@ -2,9 +2,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const svg = document.getElementById('graph');
     let selectedNode = null;
     let offset = null;
-    let lineIdCounter = 0; // A counter to give unique ids to the lines
+    let lineIdCounter = 0; // counter for lines
   
-    // Function to create a line
     function createLine(x1, y1, x2, y2) {
       const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
       line.setAttribute("x1", x1);
@@ -12,9 +11,9 @@ document.addEventListener('DOMContentLoaded', function () {
       line.setAttribute("x2", x2);
       line.setAttribute("y2", y2);
       line.classList.add("line");
-      line.setAttribute('id', 'line-' + lineIdCounter); // Assign a unique id to the line
-      lineIdCounter++; // Increment the counter
-      svg.insertBefore(line, svg.firstChild); // Ensure the line is under the nodes
+      line.setAttribute('id', 'line-' + lineIdCounter); // assign a unique id to the line
+      lineIdCounter++;
+      svg.insertBefore(line, svg.firstChild); // ensure the line is under the nodes
       return line;
     }
   
@@ -25,7 +24,6 @@ document.addEventListener('DOMContentLoaded', function () {
       circle.setAttribute("r", isCentral ? 100 : 50);
       circle.classList.add("node");
       if (!isCentral) {
-        // Non-central nodes get a data attribute linking to their line
         const line = createLine(x, y, window.innerWidth / 2, window.innerHeight / 2);
         circle.setAttribute('data-line', line.id);
       } else {
@@ -35,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
       return circle;
     }
   
-    // Add a central node
+    // add a central node
     const centralNode = createNode(window.innerWidth / 2, window.innerHeight / 2, true);
   
     svg.addEventListener('dblclick', function (event) {
@@ -60,9 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
           const dy = coord.y - offset.y;
           selectedNode.setAttribute('cx', dx);
           selectedNode.setAttribute('cy', dy);
-    
-          // Retrieve and update the corresponding line
-          const lineId = selectedNode.getAttribute('data-line');
+          const lineId = selectedNode.getAttribute('data-line'); // retrieve and update the corresponding line
           if (lineId) {
             const line = document.getElementById(lineId);
             line.setAttribute('x1', dx);
@@ -85,12 +81,12 @@ document.addEventListener('DOMContentLoaded', function () {
       };
     }
   
-    // Event listeners for drag functionality
+    // event listeners for drag 
     svg.addEventListener('mousedown', startDrag);
     svg.addEventListener('mouseup', endDrag);
     svg.addEventListener('mouseleave', endDrag);
   
-    // Ensure the central node is on top by re-appending it to the SVG
+    // central node is on top 
     svg.appendChild(centralNode);
   });
   

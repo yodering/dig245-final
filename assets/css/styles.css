@@ -3,18 +3,19 @@ html, body {
     padding: 0;
     width: 100%;
     height: 100%;
-    overflow: hidden; /* Avoid scrolling */
+    overflow: hidden; 
   }
   
   svg {
     width: 100%;
     height: 100%;
-    background-color: rgb(25, 20, 20); /* Set the background color */
+    background-color: rgb(25, 20, 20); 
   }
   
   .node {
-    fill: rgb(30, 215, 96); /* Node color */
-    cursor: grab; /* Indicates that the node is movable */
+    fill: rgb(30, 215, 96); 
+    cursor: grab; 
+    filter: drop-shadow(0 0 0.75rem rgb(21, 123, 56));
   }
   
   .node:active {
@@ -22,11 +23,11 @@ html, body {
   }
   
   #central-node {
-    fill: rgb(30, 215, 96); /* Central node color */
+    fill: rgb(30, 215, 96); 
   }
   
   .line {
-    stroke: white; /* Set line color to white */
-    stroke-width: 2; /* Make the line thicker */
+    stroke: white; 
+    stroke-width: 2; 
   }
   
