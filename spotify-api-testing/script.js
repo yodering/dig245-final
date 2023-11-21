@@ -84,8 +84,8 @@ async function displayArtistImage(token, artistId) {
         const imgUrl = imageData.images[0].url
         const img = document.createElement("img")
         img.src = imgUrl
-        img.style.maxWidth = '100px'
-        img.style.maxHeight = '100px'
+        img.style.maxWidth = '300px'
+        img.style.maxHeight = '300px'
         const imageDiv = document.getElementById('image')
         imageDiv.innerHTML = '' // clears image
         imageDiv.appendChild(img)

@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const svg = document.getElementById('graph');
-    let selectedNode = null;
-    let offset = null;
+    const svg = document.getElementById('graph'); // get graph 
+    let selectedNode = null; // no initial node selected
+    let offset = null; // offset for dragging nodes
     let lineIdCounter = 0; // counter for lines
   
     function createLine(x1, y1, x2, y2) {
@@ -19,26 +19,26 @@ document.addEventListener('DOMContentLoaded', function () {
   
     function createNode(x, y, isCentral) {
       const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-      circle.setAttribute("cx", x);
-      circle.setAttribute("cy", y);
+      circle.setAttribute("cx", x); // circle x
+      circle.setAttribute("cy", y); // circle y
       circle.setAttribute("r", isCentral ? 100 : 50);
       circle.classList.add("node");
       if (!isCentral) {
-        const line = createLine(x, y, window.innerWidth / 2, window.innerHeight / 2);
-        circle.setAttribute('data-line', line.id);
+        const line = createLine(x, y, window.innerWidth / 2, window.innerHeight / 2); // x and y from getBoundingClientRect
+        circle.setAttribute('data-line', line.id); // line from central node to circle
       } else {
-        circle.setAttribute('id', 'central-node');
+        circle.setAttribute('id', 'central-node'); // no line then central node..
       }
-      svg.appendChild(circle);
+      svg.appendChild(circle); // add circle to graph
       return circle;
     }
   
     // add a central node
     const centralNode = createNode(window.innerWidth / 2, window.innerHeight / 2, true);
   
-    svg.addEventListener('dblclick', function (event) {
-      const rect = svg.getBoundingClientRect();
-      createNode(event.clientX - rect.left, event.clientY - rect.top, false);
+    svg.addEventListener('dblclick', function (event) { // on click
+      const rect = svg.getBoundingClientRect(); // element properties
+      createNode(event.clientX - rect.left, event.clientY - rect.top, false); // not central node so central not true
     });
   
     function startDrag(event) {
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     
   
-    function endDrag(event) {
+    function endDrag(event) { 
       selectedNode = null;
       svg.removeEventListener('mousemove', drag);
     }
