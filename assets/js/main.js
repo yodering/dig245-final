@@ -134,6 +134,18 @@ svg.addEventListener('dblclick', function (event) {
 
 });
 
+//TEMP
+document.addEventListener('keypress', function(event) {
+  if (event.key === 'm') {
+      var sidebar = document.querySelector('.side-bar');
+      if (sidebar.style.visibility === 'visible') {
+          sidebar.style.visibility = 'hidden';
+      } else {
+          sidebar.style.visibility = 'visible';
+      }
+  }
+});
+
 
 
 
