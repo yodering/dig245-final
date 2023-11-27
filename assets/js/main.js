@@ -21,6 +21,9 @@ document.addEventListener('DOMContentLoaded', function () {
     circle.setAttribute("cy", y);
     circle.setAttribute("r", isCentral ? 100 : 50);
     circle.classList.add("node");
+    if (isCentral) {
+      circle.setAttribute('id', 'central-node');
+  }
     svg.appendChild(circle);
 
     if (!isCentral) {
@@ -31,23 +34,20 @@ document.addEventListener('DOMContentLoaded', function () {
     const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
     text.setAttribute("x", x);
     text.setAttribute("y", y);
-    text.setAttribute("dy", "0.35em"); // Adjust for vertical centering
+    text.setAttribute("dy", "0.35em"); 
     text.classList.add("node-text");
     svg.appendChild(text);
-
     return { circle, text };
 }
 
 createNode(window.innerWidth / 2, window.innerHeight / 2, true);
 
 svg.addEventListener('dblclick', function (event) {
-    event.stopPropagation(); // Prevent event from triggering more than once
-
     const rect = svg.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
 
-    // Avoid creating a node on the central node
+    // avoid creating a node on the central node
     if (!event.target.classList.contains('node')) {
         const newNode = createNode(x, y, false);
         handleNodeDoubleClick(newNode);
@@ -105,7 +105,7 @@ svg.addEventListener('dblclick', function (event) {
         line.setAttribute('y1', dy);
       }
 
-      // Update text position
+      // update text position
       const textElement = selectedNode.nextElementSibling;
       if (textElement && textElement.tagName === 'text') {
         textElement.setAttribute('x', dx);
@@ -114,16 +114,16 @@ svg.addEventListener('dblclick', function (event) {
     }
   }
 
-  function endDrag(event) { 
+  function endDrag() { 
     selectedNode = null;
     svg.removeEventListener('mousemove', drag);
   }
 
   function getMousePosition(event) {
-    const CTM = svg.getScreenCTM();
+    const coords = svg.getScreenCTM();
     return {
-      x: (event.clientX - CTM.e) / CTM.a,
-      y: (event.clientY - CTM.f) / CTM.d
+      x: (event.clientX - coords.e) / coords.a,
+      y: (event.clientY - coords.f) / coords.d
     };
   }
 
@@ -132,6 +132,4 @@ svg.addEventListener('dblclick', function (event) {
   svg.addEventListener('mouseup', endDrag);
   svg.addEventListener('mouseleave', endDrag);
 
-  // central node is on top 
-  svg.appendChild(centralNode);
 });

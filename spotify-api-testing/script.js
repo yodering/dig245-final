@@ -39,7 +39,7 @@ async function handleArtistData() {
             console.error('Error fetching artist data');
         }
     }
-    document.getElementById('artistInput').value = ''; // Clear the input field after adding an artist
+    document.getElementById('artistInput').value = ''; // clear input
 }
 
 async function getRandomSongs(token, artistId) {
@@ -64,7 +64,7 @@ function getRandomElements(array, numElements) {
 
 function displayRandomSongs(songs) {
     const songListDiv = document.getElementById('songList');
-    songs.forEach((song, index) => {
+    songs.forEach((song) => {
         const songItem = document.createElement('p');
         songItem.textContent = `${song.name} (by ${song.artists[0].name})`;
         songListDiv.appendChild(songItem);

@@ -32,9 +32,16 @@ html, body {
   }
   
   .node-text {
-    fill: white; /* Or any color that is visible on your background */
-    font-size: 12px; /* Adjust as needed */
-    text-anchor: middle; /* Centers text horizontally on the circle */
-    pointer-events: none; /* Ensures the text doesn't interfere with click events on the node */
+    fill: white; 
+    font-size: 24px; 
+    text-anchor: middle; 
+    pointer-events: none; 
+}
+
+.side-bar {
+  background-color: rgb(30, 215, 96); 
+  position: absolute;
+  left: 50%;
+  top: 50px;
 }
 
