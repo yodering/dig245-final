@@ -1,3 +1,5 @@
+//GRAPH JS
+
 document.addEventListener('DOMContentLoaded', function () {
   const svg = document.getElementById('graph'); 
   let lineIdCounter = 0; 
@@ -136,7 +138,7 @@ svg.addEventListener('dblclick', function (event) {
 
 //TEMP
 document.addEventListener('keypress', function(event) {
-  if (event.key === 'm') {
+  if (event.key === 'm' || event.key === 'M') {
       var sidebar = document.querySelector('.side-bar');
       if (sidebar.style.visibility === 'visible') {
           sidebar.style.visibility = 'hidden';
@@ -145,16 +147,14 @@ document.addEventListener('keypress', function(event) {
       }
   }
 });
+//TEMP
 
 
 
 
 
 
-// spotify js
-
-
-
+// SPOTIFY JS
 
 const string1 = 'faf27542287147d1adc2cfd7f72763ef';
 const string2 = 'ed2ae0fa7d99436d9c5cd5d11243f00c';
