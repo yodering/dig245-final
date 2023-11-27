@@ -15,6 +15,9 @@ html, body {
   .node {
     fill: rgb(30, 215, 96); 
     cursor: grab; 
+  }
+
+  .node:hover {
     filter: drop-shadow(0 0 0.75rem rgb(21, 123, 56));
   }
   
@@ -38,10 +41,10 @@ html, body {
     pointer-events: none; 
 }
 
-.side-bar {
-  background-color: rgb(30, 215, 96); 
-  position: absolute;
-  left: 50%;
-  top: 50px;
+  .side-bar {
+    background-color: rgb(30, 215, 96); 
+    position: absolute;
+    left: 50%;
+    top: 50px;
 }
 
