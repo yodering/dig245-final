@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>spotify random songs</title>
+    <title>Spotify Random Songs</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>random song grabber</h1>
-    <label for="artistInput">enter artist:</label>
+    <h1>Random Song Grabber</h1>
+    <label for="artistInput">Enter artist name:</label>
     <input type="text" id="artistInput">
-    <button id="getSongs">get random songs</button>
-    <div id="songList"></div>
-    <div id="image"></div>
+    <button id="getSongs">Add Artist</button>
+    <div id="playlistContainer">
+        <h3>Playlist</h3>
+        <div id="songList"></div>
+    </div>
+    <div id="imagesContainer"></div>
 
     <script src="script.js"></script>
 </body>
