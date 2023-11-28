@@ -73,7 +73,7 @@ function handleNodeDoubleClick({ circle, text }) {
   input.addEventListener('keydown', async function(e) {
     if (e.key === 'Enter') {
         text.textContent = input.value;
-        await handleArtistData(input.value); // Fetch and display songs for the artist
+        await handleArtistData(input.value); // fetch and display songs for the artist
         document.body.removeChild(input);
     }
 });
@@ -200,7 +200,6 @@ async function handleArtistData(artistName) {
           console.error('Error fetching artist data');
       }
   }
-  document.getElementById('artistInput').value = ''; // clear input
 }
 
 async function getRandomSongs(token, artistId) {
