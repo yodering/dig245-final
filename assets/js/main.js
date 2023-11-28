@@ -57,30 +57,31 @@ svg.addEventListener('dblclick', function (event) {
 });
 
 
-  function handleNodeDoubleClick({ circle, text }) {
-    const svgRect = svg.getBoundingClientRect();
-    const x = parseFloat(circle.getAttribute('cx')) + svgRect.left;
-    const y = parseFloat(circle.getAttribute('cy')) + svgRect.top;
+function handleNodeDoubleClick({ circle, text }) {
+  const svgRect = svg.getBoundingClientRect();
+  const x = parseFloat(circle.getAttribute('cx')) + svgRect.left;
+  const y = parseFloat(circle.getAttribute('cy')) + svgRect.top;
 
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.style.position = 'absolute';
-    input.style.left = x + 'px';
-    input.style.top = y + 'px';
-    document.body.appendChild(input);
-    input.focus();
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.style.position = 'absolute';
+  input.style.left = x + 'px';
+  input.style.top = y + 'px';
+  document.body.appendChild(input);
+  input.focus();
 
-    input.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') {
-          text.textContent = input.value;
-          document.body.removeChild(input);
-      }
-    });
+  input.addEventListener('keydown', async function(e) {
+    if (e.key === 'Enter') {
+        text.textContent = input.value;
+        await handleArtistData(input.value); // Fetch and display songs for the artist
+        document.body.removeChild(input);
+    }
+});
 
-    input.onblur = function() {
+  input.onblur = function() {
       document.body.removeChild(input);
-    };
-  }
+  };
+}
 
 
   function startDrag(event) {
@@ -136,6 +137,8 @@ svg.addEventListener('dblclick', function (event) {
 
 });
 
+
+
 //TEMP
 document.addEventListener('keypress', function(event) {
   if (event.key === 'm' || event.key === 'M') {
@@ -179,25 +182,25 @@ async function getAccessToken() {
     }
 }
 
-async function handleArtistData() {
-    const artistName = document.getElementById('artistInput').value;
-    const token = await getAccessToken();
-    if (token && artistName) {
-        const artistResponse = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(artistName)}&type=artist`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        if (artistResponse.ok) {
-            const artistData = await artistResponse.json();
-            const artist = artistData.artists.items[0];
-            getRandomSongs(token, artist.id);
-            displayArtistImage(token, artist.id);
-        } else {
-            console.error('Error fetching artist data');
-        }
-    }
-    document.getElementById('artistInput').value = ''; // clear input
+async function handleArtistData(artistName) {
+  artistName = artistName || document.getElementById('artistInput').value;
+  const token = await getAccessToken();
+  if (token && artistName) {
+      const artistResponse = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(artistName)}&type=artist`, {
+          headers: {
+              'Authorization': `Bearer ${token}`
+          }
+      });
+      if (artistResponse.ok) {
+          const artistData = await artistResponse.json();
+          const artist = artistData.artists.items[0];
+          await getRandomSongs(token, artist.id);
+          await displayArtistImage(token, artist.id);
+      } else {
+          console.error('Error fetching artist data');
+      }
+  }
+  document.getElementById('artistInput').value = ''; // clear input
 }
 
 async function getRandomSongs(token, artistId) {
