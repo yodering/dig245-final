@@ -1,4 +1,5 @@
 //GRAPH JS
+let artistSongsMap = {};
 
 document.addEventListener('DOMContentLoaded', function () {
   const svg = document.getElementById('graph'); 
@@ -57,7 +58,7 @@ svg.addEventListener('dblclick', function (event) {
 });
 
 
-function handleNodeDoubleClick({ circle, text }) {
+async function handleNodeDoubleClick({ circle, text }) {
   const svgRect = svg.getBoundingClientRect();
   const x = parseFloat(circle.getAttribute('cx')) + svgRect.left;
   const y = parseFloat(circle.getAttribute('cy')) + svgRect.top;
@@ -73,15 +74,23 @@ function handleNodeDoubleClick({ circle, text }) {
   input.addEventListener('keydown', async function(e) {
     if (e.key === 'Enter') {
         text.textContent = input.value;
-        await handleArtistData(input.value); // fetch and display songs for the artist
+        const centralNode = document.getElementById('central-node'); 
+        const distance = calculateDistance( // calculate distance from the central node
+            parseFloat(circle.getAttribute('cx')),
+            parseFloat(circle.getAttribute('cy')),
+            parseFloat(centralNode.getAttribute('cx')),
+            parseFloat(centralNode.getAttribute('cy'))
+        );
+        const songsCount = getSongsCount(distance); // determine the number of songs based on the distance
+        await handleArtistData(input.value, songsCount); // fetch and display songs for the artist based on distance
         document.body.removeChild(input);
     }
-});
-
-  input.onblur = function() {
+  });
+      input.onblur = function() {
       document.body.removeChild(input);
   };
 }
+
 
 
   function startDrag(event) {
@@ -101,15 +110,16 @@ function handleNodeDoubleClick({ circle, text }) {
       const dy = coord.y - offset.y;
       selectedNode.setAttribute('cx', dx);
       selectedNode.setAttribute('cy', dy);
-      const lineId = selectedNode.getAttribute('data-line');
+
+      const lineId = selectedNode.getAttribute('data-line'); // update the line connecting to the central node
       if (lineId) {
         const line = document.getElementById(lineId);
         line.setAttribute('x1', dx);
         line.setAttribute('y1', dy);
       }
-
-      // update text position
-      const textElement = selectedNode.nextElementSibling;
+      
+      
+      const textElement = selectedNode.nextElementSibling; // update the text position
       if (textElement && textElement.tagName === 'text') {
         textElement.setAttribute('x', dx);
         textElement.setAttribute('y', dy);
@@ -117,8 +127,11 @@ function handleNodeDoubleClick({ circle, text }) {
     }
   }
 
-  function endDrag() { 
-    selectedNode = null;
+  function endDrag() {
+    if (selectedNode) {
+      updateSongsForNode(selectedNode); // recalculate the distance and adjust the number of songs
+      selectedNode = null;
+    }
     svg.removeEventListener('mousemove', drag);
   }
 
@@ -137,6 +150,19 @@ function handleNodeDoubleClick({ circle, text }) {
 
 });
 
+function updateSongsForNode(node) {
+  const artistName = node.nextSibling.textContent;
+  const centralNode = document.getElementById('central-node');
+  const distance = calculateDistance(
+    parseFloat(node.getAttribute('cx')),
+    parseFloat(node.getAttribute('cy')),
+    parseFloat(centralNode.getAttribute('cx')),
+    parseFloat(centralNode.getAttribute('cy'))
+  );
+
+  const songsCount = getSongsCount(distance); // calculate the number of songs to show based on the distance
+  displaySongs(artistName, songsCount); // display the appropriate number of songs for the artist
+}
 
 
 //TEMP
@@ -152,6 +178,39 @@ document.addEventListener('keypress', function(event) {
 });
 //TEMP
 
+function toggleMenu() {
+  const menu = document.getElementById('menu')
+  menu.classList.toggle('visible')
+  }
+  
+  document.querySelector(".question-mark-space").addEventListener('click', function(event) {
+  toggleMenu()
+  })
+
+
+
+//DISTANCE CALCULATION
+function calculateDistance(x1, y1, x2, y2) {
+  return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+}
+
+
+
+const MAX_DISTANCE = 900; // min distance at which the min number of songs is shown
+const MIN_DISTANCE = 5; // min distance at which the maxnumber of songs is shown
+const MAX_SONGS = 15; // max number of songs to display
+const MIN_SONGS = 1; // min number of songs to display
+
+function getSongsCount(distance) {
+
+  const normalizedDistance = Math.min(distance, MAX_DISTANCE);
+
+  const range = MAX_DISTANCE - MIN_DISTANCE;
+  const interpolation = (MAX_SONGS - MIN_SONGS) * ((range - normalizedDistance) / range);
+  const songsCount = Math.round(interpolation) + MIN_SONGS;
+
+  return Math.min(Math.max(songsCount, MIN_SONGS), MAX_SONGS); // ensure the songs count is within the bounds
+}
 
 
 
@@ -182,71 +241,95 @@ async function getAccessToken() {
     }
 }
 
-async function handleArtistData(artistName) {
-  artistName = artistName || document.getElementById('artistInput').value;
+async function handleArtistData(artistName, distance) {
   const token = await getAccessToken();
   if (token && artistName) {
-      const artistResponse = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(artistName)}&type=artist`, {
+    const artistResponse = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(artistName)}&type=artist`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+
+    if (artistResponse.ok) {
+      const artistData = await artistResponse.json();
+      const artist = artistData.artists.items[0];
+      if (artist) { // always fetch 10 songs
+        const songs = await fetchArtistSongs(token, artist.id);
+        artistSongsMap[artistName] = songs; // store the songs
+        const songsCount = getSongsCount(distance);  // display songs based on distance
+        displaySongs(artistName, songsCount);
+        displayImage(token, artist.id); // display the artist image
+      }
+    } else {
+      console.error('Error fetching artist data');
+    }
+  }
+}
+
+async function fetchArtistSongs(token, artistId) {
+  const topTracksResponse = await fetch(`https://api.spotify.com/v1/artists/${artistId}/top-tracks?country=US`, {
+    headers: {
+        'Authorization': `Bearer ${token}`
+    }
+  });
+
+  if (topTracksResponse.ok) {
+    const topTracksData = await topTracksResponse.json();
+    return topTracksData.tracks.slice(0, 10);  // return up to 10 songs
+  } else {
+    console.error('Error fetching top tracks');
+    return [];
+  }
+}
+
+
+
+function getRandomElements(array, numElements) {
+  const shuffledArray = array.sort(() => Math.random() - 0.5);
+  return shuffledArray.slice(0, numElements);
+}
+
+
+
+function displaySongs(artistName, songsCount) {
+  const songListDiv = document.getElementById('songList');
+  const existingArtistSongs = songListDiv.querySelectorAll(`[data-artist='${artistName}']`);
+  existingArtistSongs.forEach(node => node.remove());
+  const songs = artistSongsMap[artistName]; // get list of songs for artist
+  for (let i = 0; i < songsCount; i++) { // add songs up to the number defined by songsCount
+    const song = songs[i]; // get the song at the current index
+    if (song) {
+      const songItem = document.createElement('p');
+      songItem.dataset.artist = artistName;
+      songItem.textContent = `${song.name} (by ${artistName})`;
+      songListDiv.appendChild(songItem);
+    }
+  }
+}
+
+
+
+async function displayImage(token, artistId) {
+  const imagesContainer = document.getElementById('imagesContainer');
+  if (!imagesContainer.querySelector(`#artist-image-${artistId}`)) {  // check if the image is already displayed
+      const imageResponse = await fetch(`https://api.spotify.com/v1/artists/${artistId}`, {
           headers: {
               'Authorization': `Bearer ${token}`
           }
       });
-      if (artistResponse.ok) {
-          const artistData = await artistResponse.json();
-          const artist = artistData.artists.items[0];
-          await getRandomSongs(token, artist.id);
-          await displayArtistImage(token, artist.id);
-      } else {
-          console.error('Error fetching artist data');
+      if (imageResponse.ok) {
+          const imageData = await imageResponse.json();
+          const imgUrl = imageData.images[0]?.url;
+          if (imgUrl) {
+              const img = document.createElement("img");
+              img.src = imgUrl;
+              img.id = `artist-image-${artistId}`; // assign a unique ID based on the artistId
+              img.style.maxWidth = '100px';
+              img.style.maxHeight = '100px';
+              imagesContainer.appendChild(img);
+          }
+        } else {
+            console.error('Error fetching artist image');
       }
   }
-}
-
-async function getRandomSongs(token, artistId) {
-    const topTracksResponse = await fetch(`https://api.spotify.com/v1/artists/${artistId}/top-tracks?country=US`, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    });
-    if (topTracksResponse.ok) {
-        const topTracksData = await topTracksResponse.json();
-        const randomSongs = getRandomElements(topTracksData.tracks, 10);
-        displayRandomSongs(randomSongs);
-    } else {
-        console.error('Error fetching top tracks');
-    }
-}
-
-function getRandomElements(array, numElements) {
-    const shuffledArray = array.sort(() => Math.random() - 0.5);
-    return shuffledArray.slice(0, numElements);
-}
-
-function displayRandomSongs(songs) {
-    const songListDiv = document.getElementById('songList');
-    songs.forEach((song) => {
-        const songItem = document.createElement('p');
-        songItem.textContent = `${song.name} (by ${song.artists[0].name})`;
-        songListDiv.appendChild(songItem);
-    });
-}
-
-async function displayArtistImage(token, artistId) {
-    const imageResponse = await fetch(`https://api.spotify.com/v1/artists/${artistId}`, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    });
-    if (imageResponse.ok) {
-        const imageData = await imageResponse.json();
-        const imgUrl = imageData.images[0].url;
-        const img = document.createElement("img");
-        img.src = imgUrl;
-        img.style.maxWidth = '100px';
-        img.style.maxHeight = '100px';
-        const imagesContainer = document.getElementById('imagesContainer');
-        imagesContainer.appendChild(img);
-    } else {
-        console.error('Error fetching artist image');
-    }
 }
