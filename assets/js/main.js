@@ -1,8 +1,9 @@
 //GRAPH JS
 let artistSongsMap = {};
+let svg;
 
 document.addEventListener('DOMContentLoaded', function () {
-  const svg = document.getElementById('graph'); 
+  svg = document.getElementById('graph');
   let lineIdCounter = 0; 
 
   function createLine(x1, y1, x2, y2) {
@@ -22,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     circle.setAttribute("cx", x);
     circle.setAttribute("cy", y);
-    circle.setAttribute("r", isCentral ? 100 : 50);
+    circle.setAttribute("r", isCentral ? 70 : 50);
     circle.classList.add("node");
     if (isCentral) {
       circle.setAttribute('id', 'central-node');
@@ -40,6 +41,12 @@ document.addEventListener('DOMContentLoaded', function () {
     text.setAttribute("dy", "0.35em"); 
     text.classList.add("node-text");
     svg.appendChild(text);
+
+    circle.addEventListener('contextmenu', function(event) {
+      showContextMenu(event.pageX, event.pageY, circle, event);
+    });
+    
+    
     return { circle, text };
 }
 
@@ -49,16 +56,14 @@ svg.addEventListener('dblclick', function (event) {
     const rect = svg.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
-
-    // avoid creating a node on the central node
-    if (!event.target.classList.contains('node')) {
+    if (!event.target.classList.contains('node')) { // avoid creating a node on the central node
         const newNode = createNode(x, y, false);
-        handleNodeDoubleClick(newNode);
+        nodeDoubleClick(newNode);
     }
 });
 
 
-async function handleNodeDoubleClick({ circle, text }) {
+async function nodeDoubleClick({ circle, text }) {
   const svgRect = svg.getBoundingClientRect();
   const x = parseFloat(circle.getAttribute('cx')) + svgRect.left;
   const y = parseFloat(circle.getAttribute('cy')) + svgRect.top;
@@ -66,30 +71,36 @@ async function handleNodeDoubleClick({ circle, text }) {
   const input = document.createElement('input');
   input.type = 'text';
   input.style.position = 'absolute';
-  input.style.left = x + 'px';
-  input.style.top = y + 'px';
+  input.style.left = `${x}px`;
+  input.style.top = `${y}px`;
   document.body.appendChild(input);
   input.focus();
 
   input.addEventListener('keydown', async function(e) {
     if (e.key === 'Enter') {
-        text.textContent = input.value;
-        const centralNode = document.getElementById('central-node'); 
-        const distance = calculateDistance( // calculate distance from the central node
-            parseFloat(circle.getAttribute('cx')),
-            parseFloat(circle.getAttribute('cy')),
-            parseFloat(centralNode.getAttribute('cx')),
-            parseFloat(centralNode.getAttribute('cy'))
-        );
-        const songsCount = getSongsCount(distance); // determine the number of songs based on the distance
-        await handleArtistData(input.value, songsCount); // fetch and display songs for the artist based on distance
-        document.body.removeChild(input);
+      text.textContent = input.value;
+      const centralNode = document.getElementById('central-node'); 
+      const distance = calculateDistance(
+          parseFloat(circle.getAttribute('cx')),
+          parseFloat(circle.getAttribute('cy')),
+          parseFloat(centralNode.getAttribute('cx')),
+          parseFloat(centralNode.getAttribute('cy'))
+      );
+      const songsCount = getSongsCount(distance);
+      const artistId = await handleArtistData(input.value, songsCount); 
+      if (artistId) {
+        circle.setAttribute('data-artist-id', artistId);
+        displaySongs(input.value, songsCount); // Update the playlist based on the distance
+      }
+      document.body.removeChild(input); 
     }
   });
-      input.onblur = function() {
-      document.body.removeChild(input);
+  input.onblur = function() {
+    document.body.removeChild(input); 
   };
 }
+
+
 
 
 
@@ -117,19 +128,21 @@ async function handleNodeDoubleClick({ circle, text }) {
         line.setAttribute('x1', dx);
         line.setAttribute('y1', dy);
       }
-      
-      
+
       const textElement = selectedNode.nextElementSibling; // update the text position
       if (textElement && textElement.tagName === 'text') {
         textElement.setAttribute('x', dx);
         textElement.setAttribute('y', dy);
       }
+      updateHover(selectedNode);
     }
   }
 
   function endDrag() {
     if (selectedNode) {
-      updateSongsForNode(selectedNode); // recalculate the distance and adjust the number of songs
+      updateSongs(selectedNode); // recalculate the distance and adjust the number of songs
+      selectedNode = null;
+      updateHover(selectedNode);
       selectedNode = null;
     }
     svg.removeEventListener('mousemove', drag);
@@ -148,9 +161,21 @@ async function handleNodeDoubleClick({ circle, text }) {
   svg.addEventListener('mouseup', endDrag);
   svg.addEventListener('mouseleave', endDrag);
 
+
+const menu = document.getElementById('contextMenu'); // context menu event listeners
+menu.addEventListener('click', function(event) {
+  event.stopPropagation(); // prevents the click inside the menu from propagating
 });
 
-function updateSongsForNode(node) {
+document.addEventListener('click', function(event) {
+  if (event.target !== menu) {
+    menu.style.display = 'none'; // hides the menu when clicking outside
+  }
+});
+
+});
+
+function updateSongs(node) {
   const artistName = node.nextSibling.textContent;
   const centralNode = document.getElementById('central-node');
   const distance = calculateDistance(
@@ -159,32 +184,24 @@ function updateSongsForNode(node) {
     parseFloat(centralNode.getAttribute('cx')),
     parseFloat(centralNode.getAttribute('cy'))
   );
-
-  const songsCount = getSongsCount(distance); // calculate the number of songs to show based on the distance
-  displaySongs(artistName, songsCount); // display the appropriate number of songs for the artist
+  const songsCount = getSongsCount(distance);
+  displaySongs(artistName, songsCount);
 }
 
 
-//TEMP
-document.addEventListener('keypress', function(event) {
-  if (event.key === 'm' || event.key === 'M') {
-      var sidebar = document.querySelector('.side-bar');
-      if (sidebar.style.visibility === 'visible') {
-          sidebar.style.visibility = 'hidden';
-      } else {
-          sidebar.style.visibility = 'visible';
-      }
-  }
-});
-//TEMP
 
-function toggleMenu() {
-  const menu = document.getElementById('menu')
+document.querySelector(".playlist-space").addEventListener('click', function(event) {
+   const sidebar = document.getElementById('side-bar')
+    sidebar.classList.toggle('visible')
+  })
+
+
+function toggleHelpMenu() {
+  const menu = document.getElementById('help-menu')
   menu.classList.toggle('visible')
   }
-  
   document.querySelector(".question-mark-space").addEventListener('click', function(event) {
-  toggleMenu()
+  toggleHelpMenu()
   })
 
 
@@ -196,9 +213,9 @@ function calculateDistance(x1, y1, x2, y2) {
 
 
 
-const MAX_DISTANCE = 900; // min distance at which the min number of songs is shown
-const MIN_DISTANCE = 5; // min distance at which the maxnumber of songs is shown
-const MAX_SONGS = 15; // max number of songs to display
+const MAX_DISTANCE = 800; // min distance at which the min number of songs is shown
+const MIN_DISTANCE = 200; // min distance at which the maxnumber of songs is shown
+const MAX_SONGS = 10; // max number of songs to display
 const MIN_SONGS = 1; // min number of songs to display
 
 function getSongsCount(distance) {
@@ -249,12 +266,11 @@ async function handleArtistData(artistName, distance) {
             'Authorization': `Bearer ${token}`
         }
     });
-
     if (artistResponse.ok) {
       const artistData = await artistResponse.json();
       const artist = artistData.artists.items[0];
       if (artist) { // always fetch 10 songs
-        const songs = await fetchArtistSongs(token, artist.id);
+        const songs = await fetchSongs(token, artist.id);
         artistSongsMap[artistName] = songs; // store the songs
         const songsCount = getSongsCount(distance);  // display songs based on distance
         displaySongs(artistName, songsCount);
@@ -266,13 +282,12 @@ async function handleArtistData(artistName, distance) {
   }
 }
 
-async function fetchArtistSongs(token, artistId) {
+async function fetchSongs(token, artistId) {
   const topTracksResponse = await fetch(`https://api.spotify.com/v1/artists/${artistId}/top-tracks?country=US`, {
     headers: {
         'Authorization': `Bearer ${token}`
     }
   });
-
   if (topTracksResponse.ok) {
     const topTracksData = await topTracksResponse.json();
     return topTracksData.tracks.slice(0, 10);  // return up to 10 songs
@@ -292,12 +307,13 @@ function getRandomElements(array, numElements) {
 
 
 function displaySongs(artistName, songsCount) {
-  const songListDiv = document.getElementById('songList');
-  const existingArtistSongs = songListDiv.querySelectorAll(`[data-artist='${artistName}']`);
+  const songListDiv = document.getElementById('songList'); 
+  const existingArtistSongs = songListDiv.querySelectorAll(`[data-artist='${artistName}']`); // clear existing songs for the artist
   existingArtistSongs.forEach(node => node.remove());
-  const songs = artistSongsMap[artistName]; // get list of songs for artist
-  for (let i = 0; i < songsCount; i++) { // add songs up to the number defined by songsCount
-    const song = songs[i]; // get the song at the current index
+
+  const songs = artistSongsMap[artistName] || []; // add new songs based on songsCount
+  for (let i = 0; i < Math.min(songsCount, songs.length); i++) {
+    const song = songs[i];
     if (song) {
       const songItem = document.createElement('p');
       songItem.dataset.artist = artistName;
@@ -309,27 +325,134 @@ function displaySongs(artistName, songsCount) {
 
 
 
-async function displayImage(token, artistId) {
-  const imagesContainer = document.getElementById('imagesContainer');
-  if (!imagesContainer.querySelector(`#artist-image-${artistId}`)) {  // check if the image is already displayed
-      const imageResponse = await fetch(`https://api.spotify.com/v1/artists/${artistId}`, {
-          headers: {
-              'Authorization': `Bearer ${token}`
-          }
-      });
-      if (imageResponse.ok) {
-          const imageData = await imageResponse.json();
-          const imgUrl = imageData.images[0]?.url;
-          if (imgUrl) {
-              const img = document.createElement("img");
-              img.src = imgUrl;
-              img.id = `artist-image-${artistId}`; // assign a unique ID based on the artistId
-              img.style.maxWidth = '100px';
-              img.style.maxHeight = '100px';
-              imagesContainer.appendChild(img);
-          }
-        } else {
-            console.error('Error fetching artist image');
+async function displayImage(token, artistId, artistName) {
+  const imagesContainer = document.getElementById('imagesContainer'); // get the container where images will be displayed
+  let artistImage = imagesContainer.querySelector(`#artist-image-${artistId}`);
+  if (!artistImage) { // fetch artist image data from Spotify API
+    const imageResponse = await fetch(`https://api.spotify.com/v1/artists/${artistId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
       }
+    });
+    if (imageResponse.ok) {
+      const imageData = await imageResponse.json();
+      const imgUrl = imageData.images[0]?.url; // get the URL of the artist's image
+      if (imgUrl) {       // create a new image element and set its properties
+        artistImage = document.createElement("img");
+        artistImage.src = imgUrl;
+        artistImage.id = `artist-image-${artistId}`; // assign a unique ID based on the artistId
+        artistImage.setAttribute('data-artist-name', artistName); // set the artist's name as a data attribute for easy lookup
+        artistImage.style.maxWidth = '100px';
+        artistImage.style.maxHeight = '100px';
+        imagesContainer.appendChild(artistImage); // append the image to the container
+      }
+    } else {
+      console.error('Error fetching artist image');
+    }
   }
 }
+
+
+
+
+//COLOR
+
+function getColor(distance) {
+  const maxDistance = 800; // graph scale
+  const normalizedDistance = Math.min(distance, maxDistance) / maxDistance; // normalize between 0 and 1
+
+  const red = Math.floor(255 * normalizedDistance); // create gradient from green to red for hover effect
+  const green = Math.floor(255 * (1 - normalizedDistance));
+  return `rgb(${red}, ${green}, 0)`; // green to yellow to red 
+}
+
+
+function updateHover(node) {
+  const centralNode = document.getElementById('central-node');
+  const distance = calculateDistance(
+    parseFloat(node.getAttribute('cx')),
+    parseFloat(node.getAttribute('cy')),
+    parseFloat(centralNode.getAttribute('cx')),
+    parseFloat(centralNode.getAttribute('cy'))
+  );
+  const hoverColor = getColor(distance);
+  node.style.setProperty('--hover-color', hoverColor); // css variable
+  
+}
+
+
+
+//DELETE NODE
+
+function deleteNode(node, svg) {
+  const textElement = node.nextElementSibling; // retrieve the text element and artist name
+  const artistName = textElement.textContent;
+  const artistId = node.getAttribute('data-artist-id');
+  if (artistSongsMap[artistName]) { // remove the artist's songs from the playlist
+    delete artistSongsMap[artistName];
+  }
+  updatePlaylist();
+  const imagesContainer = document.getElementById('imagesContainer'); // remove the artist's image from the images container
+  const artistImage = imagesContainer.querySelector(`#artist-image-${artistId}`);
+  if (artistImage) {
+    imagesContainer.removeChild(artistImage);
+  }
+
+  const lineId = node.getAttribute('data-line');   // remove the line connected to the node
+  if (lineId) {
+    const line = svg.querySelector(`#${lineId}`);
+    if (line) {
+      svg.removeChild(line);
+    }
+  }
+
+  if (textElement && textElement.tagName === 'text') {   // Remove the text element for the node
+    svg.removeChild(textElement);
+  }
+  svg.removeChild(node); // remove node
+}
+
+function updatePlaylist() {
+  const songListDiv = document.getElementById('songList');
+  songListDiv.innerHTML = ''; // clear the existing songs
+
+  const nodes = document.querySelectorAll('.node:not(#central-node)');
+  nodes.forEach(node => {
+    const artistName = node.nextSibling.textContent;
+    const distance = calculateDistance(
+      parseFloat(node.getAttribute('cx')),
+      parseFloat(node.getAttribute('cy')),
+      parseFloat(document.getElementById('central-node').getAttribute('cx')),
+      parseFloat(document.getElementById('central-node').getAttribute('cy'))
+    );
+
+    const songsCount = getSongsCount(distance);
+    displaySongs(artistName, songsCount);
+  });
+}
+
+
+function showContextMenu(x, y, node, event) {
+  event.preventDefault();
+  const menu = document.getElementById('contextMenu');
+  menu.style.display = 'block';
+  menu.style.left = `${x}px`;
+  menu.style.top = `${y}px`;
+
+  const deleteNodeButton = document.getElementById('deleteNode');
+  deleteNodeButton.onclick = () => {
+    deleteNode(node, document.getElementById('graph'));
+    menu.style.display = 'none'; // hide the context menu
+  };
+}
+
+
+
+// hide menu when clicking elsewhere
+document.addEventListener('click', function(event) {
+  const menu = document.getElementById('contextMenu');
+  if (event.target !== menu) {
+    menu.style.display = 'none';
+  }
+  console.log("clicked");
+});

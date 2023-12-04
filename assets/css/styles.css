@@ -1,6 +1,22 @@
+@font-face {
+  font-family: 'Rubik'; 
+  src: url('rubik.ttf') format('truetype');
+} 
+div {
+  font-family:'rubik', sans-serif;
+}
+
+
 h3 {
-  font-family: sans-serif;
+  font-family:'rubik', sans-serif;
   }
+
+h1 {
+  font-family:'rubik', sans-serif;
+  color:white;
+  text-align: center;
+
+}
   
   html, body {
   margin: 0;
@@ -23,11 +39,17 @@ h3 {
   .node {
   fill: rgb(30, 215, 96);
   cursor: grab;
+  --hover-color: rgb(30, 215, 96); 
   }
   
   .node:hover {
-  filter: drop-shadow(0 0 0.75rem rgb(21, 123, 56));
+    filter: drop-shadow(0 0 0.75rem var(--hover-color));
   }
+
+  #central-node:hover {
+    filter:none;
+    cursor:default;
+} 
   
   .node:active {
   cursor: grabbing;
@@ -41,9 +63,10 @@ h3 {
   
   .node-text {
   fill: white;
-  font-size: 24px;
+  font-size: 20px;
   text-anchor: middle;
   pointer-events: none;
+  font-family:'rubik', sans-serif;
   }
   
   .side-bar {
@@ -54,6 +77,14 @@ h3 {
   visibility: hidden;
   max-height: 100vh;
   overflow-y:scroll;
+  width:365px;
+  opacity:0;
+  transition: opacity 0.3s, visibility 0.2s;
+  }
+
+  .side-bar.visible {
+    opacity: 1;
+    visibility: visible;
   }
   
   
@@ -69,7 +100,7 @@ h3 {
   background-color: rgb(25, 20, 20);
   border: solid;
   border-width: 2px;
-  border-radius: 1px;
+  border-radius: 20px;
   border-color: rgb(30, 215, 96);
   transition: opacity 0.3s, visibility 0.2s;
   }
@@ -95,3 +126,49 @@ h3 {
   .question-mark-space:hover {
   cursor:pointer;
   }
+
+  .playlist-space {
+    position: fixed;
+    opacity:100%;
+    top: 95%;
+    left:4%;
+    transition:0.5s;
+    }
+
+    .playlist-button{
+      width:30px;
+      height:30px;
+      }
+
+    .playlist-space:hover {
+      cursor:pointer;
+    }
+
+  .context-menu {
+    z-index: 1000;
+    position: absolute;
+    background-color: #f9f9f9;
+    box-shadow: 2px 2px 8px #aaa;
+    padding: 5px;
+    z-index: 1000;
+    border-radius:30px;
+  }
+  
+  .context-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-radius:30px;
+  }
+  
+  .context-menu ul li {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius:30px;
+  }
+  
+  .context-menu ul li:hover {
+    background-color: #e0e0e0;
+  }
+
+  
