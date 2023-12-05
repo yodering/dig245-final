@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
     return { circle, text };
 }
 
-createNode(window.innerWidth / 2, window.innerHeight / 2, true);
+createNode(window.innerWidth / 2, window.innerHeight / 2, true); // central node
 
 svg.addEventListener('dblclick', function (event) {
     const rect = svg.getBoundingClientRect();
@@ -79,22 +79,33 @@ async function nodeDoubleClick({ circle, text }) {
   input.addEventListener('keydown', async function(e) {
     if (e.key === 'Enter') {
       text.textContent = input.value;
+      // Remove the input box
+      document.body.removeChild(input); 
+  
+      // Get the central node and calculate the distance
       const centralNode = document.getElementById('central-node'); 
       const distance = calculateDistance(
-          parseFloat(circle.getAttribute('cx')),
-          parseFloat(circle.getAttribute('cy')),
-          parseFloat(centralNode.getAttribute('cx')),
-          parseFloat(centralNode.getAttribute('cy'))
+        parseFloat(circle.getAttribute('cx')),
+        parseFloat(circle.getAttribute('cy')),
+        parseFloat(centralNode.getAttribute('cx')),
+        parseFloat(centralNode.getAttribute('cy'))
       );
+      // Get the songs count based on the distance
       const songsCount = getSongsCount(distance);
-      const artistId = await handleArtistData(input.value, songsCount); 
+      console.log(`Distance: ${distance}, Songs Count: ${songsCount}`); // Debugging line
+  
+      // Fetch the artist data and songs
+      const artistId = await handleArtistData(input.value, songsCount, circle);
       if (artistId) {
         circle.setAttribute('data-artist-id', artistId);
-        displaySongs(input.value, songsCount); // Update the playlist based on the distance
+        console.log(`Artist ID: ${artistId}`); // Debugging line
+      } else {
+        console.error('Failed to fetch artist data.');
       }
-      document.body.removeChild(input); 
     }
   });
+  
+  
   input.onblur = function() {
     document.body.removeChild(input); 
   };
@@ -134,19 +145,19 @@ async function nodeDoubleClick({ circle, text }) {
         textElement.setAttribute('x', dx);
         textElement.setAttribute('y', dy);
       }
-      updateHover(selectedNode);
+      updateHoverColor(selectedNode);
     }
   }
 
   function endDrag() {
     if (selectedNode) {
-      updateSongs(selectedNode); // recalculate the distance and adjust the number of songs
-      selectedNode = null;
-      updateHover(selectedNode);
+      // Recalculate the distance and adjust the number of songs
+      updateSongs(selectedNode);
       selectedNode = null;
     }
     svg.removeEventListener('mousemove', drag);
   }
+  
 
   function getMousePosition(event) {
     const coords = svg.getScreenCTM();
@@ -177,16 +188,20 @@ document.addEventListener('click', function(event) {
 
 function updateSongs(node) {
   const artistName = node.nextSibling.textContent;
-  const centralNode = document.getElementById('central-node');
-  const distance = calculateDistance(
-    parseFloat(node.getAttribute('cx')),
-    parseFloat(node.getAttribute('cy')),
-    parseFloat(centralNode.getAttribute('cx')),
-    parseFloat(centralNode.getAttribute('cy'))
-  );
-  const songsCount = getSongsCount(distance);
-  displaySongs(artistName, songsCount);
+  if (artistName && artistSongsMap[artistName]) {
+    const centralNode = document.getElementById('central-node');
+    const distance = calculateDistance(
+      parseFloat(node.getAttribute('cx')),
+      parseFloat(node.getAttribute('cy')),
+      parseFloat(centralNode.getAttribute('cx')),
+      parseFloat(centralNode.getAttribute('cy'))
+    );
+    const songsCount = getSongsCount(distance);
+    displaySongs(artistName, songsCount); // update display with new songsCount
+  }
 }
+
+
 
 
 
@@ -258,7 +273,7 @@ async function getAccessToken() {
     }
 }
 
-async function handleArtistData(artistName, distance) {
+async function handleArtistData(artistName, songsCount, circle) {
   const token = await getAccessToken();
   if (token && artistName) {
     const artistResponse = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(artistName)}&type=artist`, {
@@ -269,18 +284,20 @@ async function handleArtistData(artistName, distance) {
     if (artistResponse.ok) {
       const artistData = await artistResponse.json();
       const artist = artistData.artists.items[0];
-      if (artist) { // always fetch 10 songs
-        const songs = await fetchSongs(token, artist.id);
-        artistSongsMap[artistName] = songs; // store the songs
-        const songsCount = getSongsCount(distance);  // display songs based on distance
+      if (artist) {
+        circle.setAttribute('data-artist-id', artist.id);
+        if (!artistSongsMap[artistName]) {
+          artistSongsMap[artistName] = await fetchSongs(token, artist.id);
+        }
         displaySongs(artistName, songsCount);
         displayImage(token, artist.id); // display the artist image
+        return artist.id; // return the artist's Spotify ID
       }
-    } else {
-      console.error('Error fetching artist data');
     }
   }
 }
+
+
 
 async function fetchSongs(token, artistId) {
   const topTracksResponse = await fetch(`https://api.spotify.com/v1/artists/${artistId}/top-tracks?country=US`, {
@@ -290,12 +307,14 @@ async function fetchSongs(token, artistId) {
   });
   if (topTracksResponse.ok) {
     const topTracksData = await topTracksResponse.json();
-    return topTracksData.tracks.slice(0, 10);  // return up to 10 songs
+    return topTracksData.tracks; // return all top tracks
   } else {
     console.error('Error fetching top tracks');
     return [];
   }
 }
+
+
 
 
 
@@ -307,21 +326,22 @@ function getRandomElements(array, numElements) {
 
 
 function displaySongs(artistName, songsCount) {
-  const songListDiv = document.getElementById('songList'); 
-  const existingArtistSongs = songListDiv.querySelectorAll(`[data-artist='${artistName}']`); // clear existing songs for the artist
-  existingArtistSongs.forEach(node => node.remove());
+  const songListDiv = document.getElementById('songList');
+  const existingArtistSongs = songListDiv.querySelectorAll(`[data-artist='${artistName}']`);
+  existingArtistSongs.forEach(node => node.remove()); // clear existing songs for the artist
 
-  const songs = artistSongsMap[artistName] || []; // add new songs based on songsCount
-  for (let i = 0; i < Math.min(songsCount, songs.length); i++) {
-    const song = songs[i];
-    if (song) {
-      const songItem = document.createElement('p');
-      songItem.dataset.artist = artistName;
-      songItem.textContent = `${song.name} (by ${artistName})`;
-      songListDiv.appendChild(songItem);
-    }
-  }
+  const songs = artistSongsMap[artistName] || [];
+  const limitedSongs = songs.slice(0, songsCount); // limit the songs to the number allowed by distance
+
+  limitedSongs.forEach(song => {
+    const songItem = document.createElement('p');
+    songItem.dataset.artist = artistName;
+    songItem.textContent = `${song.name} (by ${artistName})`;
+    songListDiv.appendChild(songItem); // append each song to the playlist
+  });
 }
+
+
 
 
 
@@ -346,8 +366,6 @@ async function displayImage(token, artistId, artistName) {
         artistImage.style.maxHeight = '100px';
         imagesContainer.appendChild(artistImage); // append the image to the container
       }
-    } else {
-      console.error('Error fetching artist image');
     }
   }
 }
@@ -367,7 +385,7 @@ function getColor(distance) {
 }
 
 
-function updateHover(node) {
+function updateHoverColor(node) {
   const centralNode = document.getElementById('central-node');
   const distance = calculateDistance(
     parseFloat(node.getAttribute('cx')),
@@ -377,8 +395,8 @@ function updateHover(node) {
   );
   const hoverColor = getColor(distance);
   node.style.setProperty('--hover-color', hoverColor); // css variable
-  
 }
+
 
 
 
@@ -388,14 +406,17 @@ function deleteNode(node, svg) {
   const textElement = node.nextElementSibling; // retrieve the text element and artist name
   const artistName = textElement.textContent;
   const artistId = node.getAttribute('data-artist-id');
+
   if (artistSongsMap[artistName]) { // remove the artist's songs from the playlist
     delete artistSongsMap[artistName];
   }
   updatePlaylist();
-  const imagesContainer = document.getElementById('imagesContainer'); // remove the artist's image from the images container
+
+  const imagesContainer = document.getElementById('imagesContainer'); // retrieve the container where images are displayed
   const artistImage = imagesContainer.querySelector(`#artist-image-${artistId}`);
+
   if (artistImage) {
-    imagesContainer.removeChild(artistImage);
+    imagesContainer.removeChild(artistImage); // remove the artist's image from the container
   }
 
   const lineId = node.getAttribute('data-line');   // remove the line connected to the node
@@ -406,11 +427,12 @@ function deleteNode(node, svg) {
     }
   }
 
-  if (textElement && textElement.tagName === 'text') {   // Remove the text element for the node
+  if (textElement && textElement.tagName === 'text') {   // remove the text element for the node
     svg.removeChild(textElement);
   }
   svg.removeChild(node); // remove node
 }
+
 
 function updatePlaylist() {
   const songListDiv = document.getElementById('songList');
@@ -454,5 +476,4 @@ document.addEventListener('click', function(event) {
   if (event.target !== menu) {
     menu.style.display = 'none';
   }
-  console.log("clicked");
 });
