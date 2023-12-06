@@ -1,9 +1,12 @@
 //GRAPH JS
 let artistSongsMap = {};
 let svg;
+let selectedNode = null;
+let offset = {x: 0, y: 0};
 
 document.addEventListener('DOMContentLoaded', function () {
   svg = document.getElementById('graph');
+  
   let lineIdCounter = 0; 
 
   function createLine(x1, y1, x2, y2) {
@@ -397,6 +400,10 @@ function updateHoverColor(node) {
 //DELETE NODE
 
 function deleteNode(node, svg) {
+  if(node.id === 'central-node') {
+    console.error('Central node cannot be deleted.');
+    return; // Prevent deletion of the central node
+  }
   const textElement = node.nextElementSibling; // retrieve the text element and artist name
   const artistName = textElement.textContent;
   const artistId = node.getAttribute('data-artist-id');
