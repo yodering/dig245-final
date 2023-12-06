@@ -79,28 +79,22 @@ async function nodeDoubleClick({ circle, text }) {
   input.addEventListener('keydown', async function(e) {
     if (e.key === 'Enter') {
       text.textContent = input.value;
-      // Remove the input box
-      document.body.removeChild(input); 
+      document.body.removeChild(input);  // remove the input box
   
-      // Get the central node and calculate the distance
-      const centralNode = document.getElementById('central-node'); 
+      const centralNode = document.getElementById('central-node');   // get the central node and calculate the distance
       const distance = calculateDistance(
         parseFloat(circle.getAttribute('cx')),
         parseFloat(circle.getAttribute('cy')),
         parseFloat(centralNode.getAttribute('cx')),
         parseFloat(centralNode.getAttribute('cy'))
       );
-      // Get the songs count based on the distance
-      const songsCount = getSongsCount(distance);
+      const songsCount = getSongsCount(distance); // get the songs count based on the distance
       console.log(`Distance: ${distance}, Songs Count: ${songsCount}`); // Debugging line
   
       // Fetch the artist data and songs
       const artistId = await handleArtistData(input.value, songsCount, circle);
       if (artistId) {
         circle.setAttribute('data-artist-id', artistId);
-        console.log(`Artist ID: ${artistId}`); // Debugging line
-      } else {
-        console.error('Failed to fetch artist data.');
       }
     }
   });
@@ -151,7 +145,7 @@ async function nodeDoubleClick({ circle, text }) {
 
   function endDrag() {
     if (selectedNode) {
-      // Recalculate the distance and adjust the number of songs
+      // recalculate the distance and adjust the number of songs
       updateSongs(selectedNode);
       selectedNode = null;
     }
