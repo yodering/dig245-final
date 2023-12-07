@@ -101,11 +101,6 @@ async function nodeDoubleClick({ circle, text }) {
       }
     }
   });
-  
-  
-  input.onblur = function() {
-    document.body.removeChild(input); 
-  };
 }
 
 
