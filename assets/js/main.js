@@ -226,6 +226,15 @@ function toggleHelpMenu() {
 
 
 
+  function toggleAccountMenu() {
+    const menu = document.getElementById('user-menu')
+    menu.classList.toggle('visible')
+    }
+    document.querySelector(".user-space").addEventListener('click', function(event) {
+    toggleAccountMenu()
+    })
+
+
 //DISTANCE CALCULATION
 function calculateDistance(x1, y1, x2, y2) {
   return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));

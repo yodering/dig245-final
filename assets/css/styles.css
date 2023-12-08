@@ -146,8 +146,7 @@ h1 {
     }
 
     #playlistNameInput {
-      /* ...existing styles... */
-      margin-bottom: 1rem; /* Add some space below the input box */
+      margin-bottom: 1rem;
     }
 
   .context-menu {
@@ -195,6 +194,44 @@ h1 {
 
 
 #songList {
-  /* ...existing styles... */
-  margin-top: 1rem; /* Add some space above the song list */
+  margin-top: 1rem; 
 }
+
+.user-space {
+  position: fixed;
+  opacity:100%;
+  top: 95%;
+  left:7%;
+  transition:0.5s;
+}
+
+.user {
+  width:30px;
+  height:30px;
+  }
+
+  .user-menu {
+    opacity: 0;
+    visibility: hidden;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 752px;
+    height: 400px;
+    background-color: rgb(25, 20, 20);
+    border: solid;
+    border-width: 2px;
+    border-radius: 20px;
+    border-color: rgb(30, 215, 96);
+    transition: opacity 0.3s, visibility 0.2s;
+    }
+    
+    .user-menu.visible {
+    opacity: 1;
+    visibility: visible;
+    }
+
+    .user-space:hover {
+      cursor:pointer;
+      }
