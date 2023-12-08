@@ -79,14 +79,13 @@ h1 {
     overflow-y: auto; 
     transform: translateX(100%);
     transition: transform 0.3s ease; 
+    padding-left: 3%;
   }
   
   
   .side-bar.slide-in {
     transform: translateX(0); 
   }
-  
-  
   
   
   .menu {
@@ -146,6 +145,11 @@ h1 {
       cursor:pointer;
     }
 
+    #playlistNameInput {
+      /* ...existing styles... */
+      margin-bottom: 1rem; /* Add some space below the input box */
+    }
+
   .context-menu {
     z-index: 1000;
     position: absolute;
@@ -187,4 +191,10 @@ h1 {
 
 .song-item p {
     margin: 0; 
+}
+
+
+#songList {
+  /* ...existing styles... */
+  margin-top: 1rem; /* Add some space above the song list */
 }
