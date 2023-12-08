@@ -210,6 +210,10 @@ h1 {
   height:30px;
   }
 
+  .user:hover {
+    cursor:pointer;
+  }
+
   .user-menu {
     opacity: 0;
     visibility: hidden;
@@ -232,6 +236,3 @@ h1 {
     visibility: visible;
     }
 
-    .user-space:hover {
-      cursor:pointer;
-      }
