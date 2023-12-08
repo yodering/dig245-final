@@ -70,17 +70,19 @@ h1 {
   }
   
   .side-bar {
-  background-color: rgb(30, 215, 96);
-  position: absolute;
-  left: 75%;
-  top: 0%;
-  visibility: hidden;
-  max-height: 100vh;
-  overflow-y:scroll;
-  width:365px;
-  opacity:0;
-  transition: opacity 0.3s, visibility 0.2s;
+    background-color: rgb(30, 215, 96);
+    position: absolute;
+    right: 0%;
+    top: 0%;
+    visibility: hidden;
+    max-height: 100vh;
+    overflow-y: scroll;
+    width: 365px;
+    opacity: 0;
+    transition: opacity 0.3s, visibility 0.2s;
   }
+  
+  
 
   .side-bar.visible {
     opacity: 1;
