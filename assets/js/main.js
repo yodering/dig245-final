@@ -198,9 +198,9 @@ function updateSongs(node) {
 
 
 document.querySelector(".playlist-space").addEventListener('click', function(event) {
-   const sidebar = document.getElementById('side-bar')
-    sidebar.classList.toggle('visible')
-  })
+  const sidebar = document.getElementById('side-bar');
+  sidebar.classList.toggle('slide-in');
+});
 
 
 function toggleHelpMenu() {
@@ -314,7 +314,6 @@ async function handleArtistData(artistName, songsCount, circle) {
                     artistSongsMap[artistName] = await fetchSongs(token, artist.id);
                 }
                 displaySongs(artistName, songsCount);
-                displayImage(token, artist.id);
                 return artist.id;
             }
         }
@@ -386,30 +385,6 @@ async function fetchAlbumArt(albumId) {
   return null;
 }
 
-async function displayImage(token, artistId, artistName) {
-  const imagesContainer = document.getElementById('imagesContainer');
-  let artistImage = imagesContainer.querySelector(`#artist-image-${artistId}`);
-  if (!artistImage) {
-      const imageResponse = await fetch(`https://api.spotify.com/v1/artists/${artistId}`, {
-          headers: {
-              'Authorization': `Bearer ${token}`
-          }
-      });
-      if (imageResponse.ok) {
-          const imageData = await imageResponse.json();
-          const imgUrl = imageData.images[0]?.url;
-          if (imgUrl) {
-              artistImage = document.createElement("img");
-              artistImage.src = imgUrl;
-              artistImage.id = `artist-image-${artistId}`;
-              artistImage.setAttribute('data-artist-name', artistName);
-              artistImage.style.maxWidth = '100px';
-              artistImage.style.maxHeight = '100px';
-              imagesContainer.appendChild(artistImage);
-          }
-      }
-  }
-}
 
 
 
@@ -452,19 +427,12 @@ function deleteNode(node, svg) {
   }
   const textElement = node.nextElementSibling; // retrieve the text element and artist name
   const artistName = textElement.textContent;
-  const artistId = node.getAttribute('data-artist-id');
 
   if (artistSongsMap[artistName]) { // remove the artist's songs from the playlist
     delete artistSongsMap[artistName];
   }
   updatePlaylist();
 
-  const imagesContainer = document.getElementById('imagesContainer'); // retrieve the container where images are displayed
-  const artistImage = imagesContainer.querySelector(`#artist-image-${artistId}`);
-
-  if (artistImage) {
-    imagesContainer.removeChild(artistImage); // remove the artist's image from the container
-  }
 
   const lineId = node.getAttribute('data-line');   // remove the line connected to the node
   if (lineId) {
