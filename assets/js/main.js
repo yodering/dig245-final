@@ -3,6 +3,8 @@ let artistSongsMap = {};
 let svg;
 let selectedNode = null;
 let offset = {x: 0, y: 0};
+let nodeIdCounter = 0;
+
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -21,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
   svg = document.getElementById('graph');
 
   let lineIdCounter = 0; 
+
 
   function createLine(x1, y1, x2, y2) {
     const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
@@ -62,6 +65,9 @@ document.addEventListener('DOMContentLoaded', function () {
       showContextMenu(event.pageX, event.pageY, circle, event);
     });
     
+
+    circle.setAttribute('data-node-id', 'node-' + nodeIdCounter);  // assign node ID
+    nodeIdCounter++;
     
     return { circle, text };
 }
@@ -69,13 +75,18 @@ document.addEventListener('DOMContentLoaded', function () {
 createNode(window.innerWidth / 2, window.innerHeight / 2, true); // central node
 
 svg.addEventListener('dblclick', function (event) {
-    const rect = svg.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-    if (!event.target.classList.contains('node')) { // avoid creating a node on the central node
-        const newNode = createNode(x, y, false);
-        nodeDoubleClick(newNode);
-    }
+  const rect = svg.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  const y = event.clientY - rect.top;
+  if (!event.target.classList.contains('node')) { // avoid creating a node on the central node
+      if (nodeIdCounter < 20) {  // check if the limit has been reached
+          const newNode = createNode(x, y, false);
+          nodeDoubleClick(newNode);
+      } else {
+          // display a message to the user that the node limit has been reached
+          alert("Maximum of 20 nodes reached.");
+      }
+  }
 });
 
 
@@ -91,6 +102,8 @@ async function nodeDoubleClick({ circle, text }) {
   input.style.top = `${y}px`;
   document.body.appendChild(input);
   input.focus();
+
+  input.setAttribute('data-for-node', circle.getAttribute('data-node-id')); // Link input box to node
 
   input.addEventListener('keydown', async function(e) {
     if (e.key === 'Enter') {
@@ -468,6 +481,13 @@ function deleteNode(node, svg) {
     svg.removeChild(textElement);
   }
   svg.removeChild(node); // remove node
+
+  const nodeId = node.getAttribute('data-node-id');
+  const inputBox = document.querySelector(`input[data-for-node='${nodeId}']`);
+  if (inputBox) {
+      document.body.removeChild(inputBox);  // remove the linked input box
+  }
+
 }
 
 
@@ -514,3 +534,5 @@ document.addEventListener('click', function(event) {
     menu.style.display = 'none';
   }
 });
+
+
