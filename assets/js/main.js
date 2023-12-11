@@ -293,7 +293,7 @@ function getSongsCount(distance) {
 
 const string1 = 'ed2ae0fa7d99436d9c5cd5d11243f00c';
 const string2 = 'faf27542287147d1adc2cfd7f72763ef';
-const redirectUri = 'http://localhost:3000/callback'; // redirect URI TEMP
+const redirectUri = encodeURI('https://yodering.github.io/dig245-final/'); // redirect URI TEMP
 let userAccessToken;
 
 document.addEventListener('DOMContentLoaded', function () {
