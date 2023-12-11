@@ -4,7 +4,7 @@ let svg;
 let selectedNode = null;
 let offset = {x: 0, y: 0};
 let nodeIdCounter = 0;
-let displayedSongsMap = new Map();
+let displayedSongsMap = {};
 
 
 
@@ -411,7 +411,7 @@ async function displaySongs(artistName, songsCount) {
 
   const songs = artistSongsMap[artistName] || [];
   const limitedSongs = songs.slice(0, songsCount);
-  displayedSongsMap.set(artistName, limitedSongs);
+  displayedSongsMap[artistName] = limitedSongs;
 
   for (const song of limitedSongs) {
       const songItem = document.createElement('div');
@@ -506,7 +506,12 @@ async function savePlaylistToSpotify() {
   console.log(`Created playlist with ID: ${playlistId}`);
 
   // collect track URIs
-  const trackUris = Array.from(displayedSongsMap.values()).flat().map(song => song.uri);
+  const trackUris = [];
+    for (const songs of Object.values(displayedSongsMap)) {
+        for (const song of songs) {
+            trackUris.push(song.uri);
+        }
+    }
   console.log('Track URIs collected:', trackUris);
 
   // add tracks to the new playlist
