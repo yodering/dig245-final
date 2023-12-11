@@ -337,11 +337,13 @@ function spotifyLogin() {
   const scope = 'playlist-modify-public playlist-modify-private';
   const authUrl = `https://accounts.spotify.com/authorize?client_id=${string2}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scope)}`;
 
-  // open Spotify login in a new window
-  window.open(authUrl, '_blank', 'width=800,height=600');
+  // Open Spotify login in a new tab
+  window.open(authUrl, '_blank');
 
-  console.log("Opening Spotify login in new window with URL:", authUrl);
+  // logging to console
+  console.log("Opening Spotify login in new tab with URL:", authUrl);
 }
+
 
 
 
