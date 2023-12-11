@@ -237,3 +237,42 @@ h1 {
     visibility: visible;
     }
 
+
+    .artist-menu {
+      opacity: 0;
+      visibility: hidden;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 752px;
+      height: 400px;
+      background-color: rgb(25, 20, 20);
+      border: solid;
+      border-width: 2px;
+      border-radius: 20px;
+      border-color: rgb(30, 215, 96);
+      transition: opacity 0.3s, visibility 0.2s;
+      }
+      
+      .artist-menu.visible {
+      opacity: 1;
+      visibility: visible;
+      }
+
+      .artist-img-space {
+        position: fixed;
+        opacity:100%;
+        top: 95%;
+        left:10%;
+        transition:0.5s;
+      }
+
+      .artist-img {
+        width:30px;
+        height:30px;
+      }
+
+      .artist-img:hover{
+        cursor:pointer;
+      }

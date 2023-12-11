@@ -61,6 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
     text.classList.add("node-text");
     svg.appendChild(text);
 
+
     circle.addEventListener('contextmenu', function(event) {
       showContextMenu(event.pageX, event.pageY, circle, event);
     });
@@ -68,6 +69,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     circle.setAttribute('data-node-id', 'node-' + nodeIdCounter);  // assign node ID
     nodeIdCounter++;
+
+    
+
     
     return { circle, text };
 }
@@ -247,6 +251,18 @@ function toggleHelpMenu() {
     toggleAccountMenu()
     })
 
+    function toggleArtistMenu() {
+      const menu = document.getElementById('artist-menu')
+      menu.classList.toggle('visible')
+      }
+      document.querySelector(".artist-img-space").addEventListener('click', function(event) {
+      toggleArtistMenu()
+      })   
+
+
+// FONT ADJUSTMENT
+
+
 
 //DISTANCE CALCULATION
 function calculateDistance(x1, y1, x2, y2) {
@@ -349,6 +365,7 @@ async function handleArtistData(artistName, songsCount, circle) {
                     artistSongsMap[artistName] = await fetchSongs(token, artist.id);
                 }
                 displaySongs(artistName, songsCount);
+                displayImage(token, artist.id);
                 return artist.id;
             }
         }
@@ -422,7 +439,30 @@ async function fetchAlbumArt(albumId) {
 
 
 
-
+async function displayImage(token, artistId, artistName) {
+  const imagesContainer = document.getElementById('imagesContainer'); // get the container where images will be displayed
+  let artistImage = imagesContainer.querySelector(`#artist-image-${artistId}`);
+  if (!artistImage) { // fetch artist image data from Spotify API
+    const imageResponse = await fetch(`https://api.spotify.com/v1/artists/${artistId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    if (imageResponse.ok) {
+      const imageData = await imageResponse.json();
+      const imgUrl = imageData.images[0]?.url; // get the URL of the artist's image
+      if (imgUrl) {       // create a new image element and set its properties
+        artistImage = document.createElement("img");
+        artistImage.src = imgUrl;
+        artistImage.id = `artist-image-${artistId}`; // assign a unique ID based on the artistId
+        artistImage.setAttribute('data-artist-name', artistName); // set the artist's name as a data attribute for easy lookup
+        artistImage.style.maxWidth = '100px';
+        artistImage.style.maxHeight = '100px';
+        imagesContainer.appendChild(artistImage); // append the image to the container
+      }
+    }
+  }
+}
 
 
 
@@ -462,12 +502,19 @@ function deleteNode(node, svg) {
   }
   const textElement = node.nextElementSibling; // retrieve the text element and artist name
   const artistName = textElement.textContent;
+  const artistId = node.getAttribute('data-artist-id');
 
   if (artistSongsMap[artistName]) { // remove the artist's songs from the playlist
     delete artistSongsMap[artistName];
   }
   updatePlaylist();
 
+  const imagesContainer = document.getElementById('imagesContainer'); // retrieve the container where images are displayed
+  const artistImage = imagesContainer.querySelector(`#artist-image-${artistId}`);
+
+  if (artistImage) {
+    imagesContainer.removeChild(artistImage); // remove the artist's image from the container
+  }
 
   const lineId = node.getAttribute('data-line');   // remove the line connected to the node
   if (lineId) {
