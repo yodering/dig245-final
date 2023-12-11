@@ -302,13 +302,19 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 async function handleAuthRedirect() {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const code = urlParams.get('code');
-    if (code) {
-        userAccessToken = await exchangeCodeForToken(code);
-    }
+  const queryString = window.location.search;
+  console.log("Query string received:", queryString);
+
+  const urlParams = new URLSearchParams(queryString);
+  const code = urlParams.get('code');
+  console.log("Authorization code:", code);
+
+  if (code) {
+      userAccessToken = await exchangeCodeForToken(code);
+      console.log("User access token:", userAccessToken);
+  }
 }
+
 
 async function exchangeCodeForToken(code) {
     const response = await fetch('https://accounts.spotify.com/api/token', {
@@ -328,10 +334,17 @@ async function exchangeCodeForToken(code) {
 }
 
 function spotifyLogin() {
-    const scope = 'playlist-modify-public playlist-modify-private';
-    const authUrl = `https://accounts.spotify.com/authorize?client_id=${string2}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scope)}`;
-    window.location.href = authUrl;
+  const scope = 'playlist-modify-public playlist-modify-private';
+  const authUrl = `https://accounts.spotify.com/authorize?client_id=${string2}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scope)}`;
+
+  // open Spotify login in a new window
+  window.open(authUrl, '_blank', 'width=800,height=600');
+
+  console.log("Opening Spotify login in new window with URL:", authUrl);
 }
+
+
+
 
 async function getAccessToken() {
     const response = await fetch('https://accounts.spotify.com/api/token', {
@@ -414,7 +427,7 @@ async function displaySongs(artistName, songsCount) {
           songItem.appendChild(albumArtImg);
       }
 
-      // Add song name
+      // add song name
       const songName = document.createElement('p');
       songName.textContent = `${song.name} (by ${artistName})`;
       songItem.appendChild(songName);
