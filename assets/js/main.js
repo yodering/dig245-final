@@ -116,6 +116,7 @@ async function nodeDoubleClick({ circle, text }) {
       document.body.removeChild(input);  // remove the input box
   
       const centralNode = document.getElementById('central-node');   // get the central node and calculate the distance
+      circle.setAttribute('data-visible-in-sidebar', 'true');
       const distance = calculateDistance(
         parseFloat(circle.getAttribute('cx')),
         parseFloat(circle.getAttribute('cy')),
@@ -634,8 +635,8 @@ function updatePlaylist() {
   const songListDiv = document.getElementById('songList');
   songListDiv.innerHTML = ''; // clear the existing songs
 
-  const nodes = document.querySelectorAll('.node:not(#central-node)');
-  nodes.forEach(node => {
+  const visibleNodes = document.querySelectorAll('.node[data-visible-in-sidebar="true"]');
+  visibleNodes.forEach(node => {
     const artistName = node.nextSibling.textContent;
     const distance = calculateDistance(
       parseFloat(node.getAttribute('cx')),
@@ -648,7 +649,6 @@ function updatePlaylist() {
     displaySongs(artistName, songsCount);
   });
 }
-
 
 function showContextMenu(x, y, node, event) {
   event.preventDefault();
