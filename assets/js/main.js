@@ -11,12 +11,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const setPlaylistNameButton = document.getElementById('setPlaylistName');
   const playlistNameInput = document.getElementById('playlistNameInput');
-  const playlistHeader = document.querySelector('#playlistContainer h3'); // Select the playlist header
+  const playlistHeader = document.querySelector('#playlistContainer h3'); // select the playlist header
 
   setPlaylistNameButton.addEventListener('click', function() {
       const playlistName = playlistNameInput.value;
       if (playlistName) {
-          playlistHeader.textContent = playlistName; // Update the playlist header with the user-entered name
+          playlistHeader.textContent = playlistName; // update the playlist header user entered name
       }
   });
 
