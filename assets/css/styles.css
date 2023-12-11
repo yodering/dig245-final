@@ -276,3 +276,21 @@ h1 {
       .artist-img:hover{
         cursor:pointer;
       }
+
+
+      .shuffle-space {
+        position: fixed;
+        opacity:100%;
+        top: 95%;
+        left:13%;
+        transition:0.5s;
+      }
+
+      .shuffle {
+        width:30px;
+        height:30px;
+      }
+
+      .shuffle:hover{
+        cursor:pointer;
+      }     

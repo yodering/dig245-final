@@ -6,6 +6,7 @@ let offset = {x: 0, y: 0};
 let nodeIdCounter = 0;
 
 
+
 document.addEventListener('DOMContentLoaded', function () {
 
   const setPlaylistNameButton = document.getElementById('setPlaylistName');
@@ -227,19 +228,25 @@ function updateSongs(node) {
 
 
 
+
+
+document.getElementById('shuffleButton').addEventListener('click', shuffleSongs);
+
+
+
+
+
 document.querySelector(".playlist-space").addEventListener('click', function(event) {
   const sidebar = document.getElementById('side-bar');
   sidebar.classList.toggle('slide-in');
 });
 
 
-function toggleHelpMenu() {
-  const menu = document.getElementById('help-menu')
-  menu.classList.toggle('visible')
-  }
-  document.querySelector(".question-mark-space").addEventListener('click', function(event) {
-  toggleHelpMenu()
-  })
+  function toggleHelpMenu() {
+    const menu = document.getElementById('help-menu')
+    menu.classList.toggle('visible')
+    }
+    document.querySelector(".question-mark-space").addEventListener('click', toggleHelpMenu)
 
 
 
@@ -247,17 +254,13 @@ function toggleHelpMenu() {
     const menu = document.getElementById('user-menu')
     menu.classList.toggle('visible')
     }
-    document.querySelector(".user-space").addEventListener('click', function(event) {
-    toggleAccountMenu()
-    })
+    document.querySelector(".user-space").addEventListener('click', toggleAccountMenu)
 
     function toggleArtistMenu() {
       const menu = document.getElementById('artist-menu')
       menu.classList.toggle('visible')
       }
-      document.querySelector(".artist-img-space").addEventListener('click', function(event) {
-      toggleArtistMenu()
-      })   
+      document.querySelector(".artist-img-space").addEventListener('click', toggleArtistMenu)
 
 
 // FONT ADJUSTMENT
@@ -583,3 +586,24 @@ document.addEventListener('click', function(event) {
 });
 
 
+// SHUFFLE SONGS
+
+
+// randomize array elements
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]]; // swap elements
+  }
+  return array;
+}
+
+// shuffle songs
+function shuffleSongs() {
+  for (const artistName in artistSongsMap) {
+    if (artistSongsMap.hasOwnProperty(artistName)) {
+      artistSongsMap[artistName] = shuffleArray(artistSongsMap[artistName]);
+    }
+  }
+  updatePlaylist(); // refresh the playlist with songs
+}
