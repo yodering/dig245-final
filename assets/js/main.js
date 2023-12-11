@@ -484,26 +484,34 @@ async function displayImage(token, artistId, artistName) {
 async function savePlaylistToSpotify() {
   // check for user access token
   if (!userAccessToken) {
+    console.log('No user access token found.');
     alert('Please log in to Spotify first.');
     return;
   }
+  console.log('User access token is available.');
 
   // get the user's Spotify ID
   const userId = await fetchSpotifyUserId();
+  console.log(`Fetched Spotify user ID: ${userId}`);
 
   // get the playlist name from the input field
   const playlistName = document.getElementById('playlistNameInput').value || 'My New Playlist';
+  console.log(`Playlist Name: ${playlistName}`);
 
   // create playlist
   const playlistId = await createSpotifyPlaylist(userId, playlistName);
+  console.log(`Created playlist with ID: ${playlistId}`);
 
   // collect track URIs
   const trackUris = Object.values(artistSongsMap).flat().map(song => song.uri);
+  console.log('Track URIs collected:', trackUris);
 
   // add tracks to the new playlist
   await addTracksToPlaylist(playlistId, trackUris);
+  console.log('Tracks added to the playlist.');
 
   alert(`Playlist '${playlistName}' saved to your Spotify account!`);
+  console.log(`Playlist '${playlistName}' saved to the user's Spotify account.`);
 }
 
 async function fetchSpotifyUserId() {
@@ -525,7 +533,7 @@ async function createSpotifyPlaylist(userId, playlistName) {
     },
     body: JSON.stringify({
       name: playlistName,
-      description: 'Created from my app',
+      description: 'Created from Graphify',
       public: false
     })
   });
