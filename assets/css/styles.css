@@ -34,6 +34,7 @@ h1 {
   width: 100%;
   height: 100%;
   background-color: rgb(25, 20, 20);
+  z-index: 5;
   }
   
   .node {
@@ -69,81 +70,17 @@ h1 {
   font-family:'rubik', sans-serif;
   }
   
-  .side-bar {
-    background-color: rgb(30, 215, 96);
-    position: fixed; 
-    top: 0;
-    right: 0; 
-    width: 365px; 
-    max-height: 100vh;
-    overflow-y: auto; 
-    transform: translateX(101%);
-    transition: transform 0.3s ease; 
-    padding-left: 3%;
-  }
   
-  
-  
-  .side-bar.slide-in {
-    transform: translateX(0); 
-  }
-  
-  
-  .menu {
-  opacity: 0;
-  visibility: hidden;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 752px;
-  height: 400px;
-  background-color: rgb(25, 20, 20);
-  border: solid;
-  border-width: 2px;
-  border-radius: 20px;
-  border-color: rgb(30, 215, 96);
-  transition: opacity 0.3s, visibility 0.2s;
-  }
-  
-  .menu.visible {
-  opacity: 1;
-  visibility: visible;
-  }
+
   
   .question-mark-space {
-  position: fixed;
-  opacity:100%;
-  top: 95%;
-  left:1%;
-  transition:0.5s;
+    opacity:100%;
   }
   
-  .question-mark {
-  width:30px;
-  height:30px;
-  }
-  
-  .question-mark-space:hover {
-  cursor:pointer;
-  }
 
 
   .playlist-space {
-    position: fixed;
     opacity:100%;
-    top: 95%;
-    left:4%;
-    transition:0.5s;
-    }
-
-    .playlist-button{
-      width:30px;
-      height:30px;
-      }
-
-    .playlist-space:hover {
-      cursor:pointer;
     }
 
     #playlistNameInput {
@@ -194,103 +131,146 @@ h1 {
 }
 
 
-#songList {
-  margin-top: 1rem; 
-}
-
 .user-space {
-  position: fixed;
   opacity:100%;
-  top: 95%;
-  left:7%;
-  transition:0.5s;
 }
 
-.user {
-  width:30px;
-  height:30px;
-  }
 
-  .user:hover {
-    cursor:pointer;
-  }
+      .artist-space {
+        opacity:100%;
+      }
+   
 
-  .user-menu {
-    opacity: 0;
-    visibility: hidden;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 752px;
-    height: 400px;
-    background-color: rgb(25, 20, 20);
-    border: solid;
-    border-width: 2px;
-    border-radius: 20px;
-    border-color: rgb(30, 215, 96);
-    transition: opacity 0.3s, visibility 0.2s;
+      .container {
+        position: fixed; /* Changed from relative to fixed */
+        width: 100%;
+        bottom: 0; /* Align to the bottom */
+        left: 0; /* Align to the left */
+        display: flex;
+        justify-content: center;
+        z-index: 10; /* Ensure this is above other content but below modal dialogs or popups */
+      }
+      
+      
+      nav {
+        background: #f9f9f9;
+        border-radius: 50px;
+        padding: 8px 15px; /* Adjust padding as needed */
+        box-shadow: 0 25px 20px -20px rgba(0, 0, 0, 0.4);
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        display: flex; /* Use flex to center the ul */
+        justify-content: center; /* Center ul horizontally */
+      }
+      
+      nav ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex; /* Use flexbox for horizontal alignment */
+        align-items: center; /* Align items vertically */
+        justify-content: center; /* Center items horizontally */
+      }
+      
+      nav ul li {
+        padding: 5px 10px; /* Adjust padding as needed */
+        font-size: 14px; /* Adjust font size as needed */
+        font-weight: 500;
+        color: rgb(25, 20, 20);
+        cursor: pointer;
+        line-height: 1.5; /* Match the line height to the height of your nav items if needed */
+        position:relative;
+        z-index:2;
+        transition: color 0.5s;
+      }
+      
+    nav ul li::after {
+      content: '';
+      background:rgb(30, 215, 96);
+      width: 100%;
+      height:100%;
+      border-radius: 30px;
+      position:absolute;
+      top:100%;
+      left:50%;
+      transform:translate(-50%, -50%);
+      z-index:-1;
+      opacity:0;
+      transition:  top 0.5s, opacity 0.5s;
     }
-    
-    .user-menu.visible {
-    opacity: 1;
-    visibility: visible;
+
+    nav ul li:hover {
+      color: #f9f9f9;
+    }
+
+    nav ul li:hover::after {
+      top: 50%;
+      opacity: 1;
     }
 
 
-    .artist-menu {
+    .glass {
+      position:absolute;
+      width: 800px;
+      height:400px;
+      background: rgba(255, 255, 255, .1);
       opacity: 0;
       visibility: hidden;
-      position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 752px;
-      height: 400px;
-      background-color: rgb(25, 20, 20);
-      border: solid;
-      border-width: 2px;
-      border-radius: 20px;
-      border-color: rgb(30, 215, 96);
+      border-radius: 50px;
       transition: opacity 0.3s, visibility 0.2s;
-      }
-      
-      .artist-menu.visible {
+      box-shadow:0 25px 45px rgba(0, 0, 0, .2);
+      border: 2px solid rgba(255, 255, 255, .2);
+      backdrop-filter:blur(10px);
+
+    }
+
+    .glass.visible {
       opacity: 1;
       visibility: visible;
       }
 
-      .artist-img-space {
-        position: fixed;
-        opacity:100%;
-        top: 95%;
-        left:10%;
-        transition:0.5s;
+      .glass#side-bar {
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        color: white; 
       }
-
-      .artist-img {
-        width:30px;
-        height:30px;
+      
+      #playlistContainer {
+        width: 100%; 
+        height: calc(100% - 60px); 
+        overflow-y: auto; 
+        padding: 20px; 
       }
-
-      .artist-img:hover{
-        cursor:pointer;
+      
+      #playlistContainer h1 {
+        margin-top: 20px; 
+        align-self: flex-start; 
       }
-
-
-      .shuffle-space {
-        position: fixed;
-        opacity:100%;
-        top: 95%;
-        left:13%;
-        transition:0.5s;
+      
+      #playlistContainer input, 
+      #playlistContainer button {
+        margin: 10px auto; 
+        display: block; 
+        width: fit-content; 
       }
-
-      .shuffle {
-        width:30px;
-        height:30px;
+      
+      #songList {
+        width: 100%; 
+        overflow-y: auto; 
+        padding-left: 20px;
       }
-
-      .shuffle:hover{
-        cursor:pointer;
-      }     
+      
+      .song-item {
+        padding: 5px 0;
+      }
+      
+      
+      
+      

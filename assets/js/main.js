@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const setPlaylistNameButton = document.getElementById('setPlaylistName');
   const playlistNameInput = document.getElementById('playlistNameInput');
-  const playlistHeader = document.querySelector('#playlistContainer h3'); // select the playlist header
+  const playlistHeader = document.querySelector('#playlistContainer h1'); // select the playlist header
 
   setPlaylistNameButton.addEventListener('click', function() {
       const playlistName = playlistNameInput.value;
@@ -228,6 +228,14 @@ function updateSongs(node) {
 
 
 
+function closeAllMenus() {
+  const menus = document.querySelectorAll('.glass');
+  menus.forEach(menu => {
+    menu.classList.remove('visible');
+  });
+}
+
+
 
 
 
@@ -235,34 +243,53 @@ function updateSongs(node) {
 document.getElementById('shuffleButton').addEventListener('click', shuffleSongs);
 
 
+function toggleHelpMenu() {
+  const menu = document.getElementById('help-menu');
+  if (menu.classList.contains('visible')) {
+    menu.classList.remove('visible');
+  } else {
+    closeAllMenus();
+    menu.classList.add('visible');
+  }
+}
 
+function toggleAccountMenu() {
+  const menu = document.getElementById('user-menu');
+  if (menu.classList.contains('visible')) {
+    menu.classList.remove('visible');
+  } else {
+    closeAllMenus();
+    menu.classList.add('visible');
+  }
+}
 
+function toggleArtistMenu() {
+  const menu = document.getElementById('artist-menu');
+  if (menu.classList.contains('visible')) {
+    menu.classList.remove('visible');
+  } else {
+    closeAllMenus();
+    menu.classList.add('visible');
+  }
+}
 
-document.querySelector(".playlist-space").addEventListener('click', function(event) {
+function togglePlaylistMenu() {
   const sidebar = document.getElementById('side-bar');
-  sidebar.classList.toggle('slide-in');
-});
+  if (sidebar.classList.contains('visible')) {
+    sidebar.classList.remove('visible');
+  } else {
+    closeAllMenus();
+    sidebar.classList.add('visible');
+  }
+}
 
 
-  function toggleHelpMenu() {
-    const menu = document.getElementById('help-menu')
-    menu.classList.toggle('visible')
-    }
-    document.querySelector(".question-mark-space").addEventListener('click', toggleHelpMenu)
+document.querySelector(".question-mark-space").addEventListener('click', toggleHelpMenu);
+document.querySelector(".user-space").addEventListener('click', toggleAccountMenu);
+document.querySelector(".artist-space").addEventListener('click', toggleArtistMenu);
+document.querySelector(".playlist-space").addEventListener('click', togglePlaylistMenu);
 
 
-
-  function toggleAccountMenu() {
-    const menu = document.getElementById('user-menu')
-    menu.classList.toggle('visible')
-    }
-    document.querySelector(".user-space").addEventListener('click', toggleAccountMenu)
-
-    function toggleArtistMenu() {
-      const menu = document.getElementById('artist-menu')
-      menu.classList.toggle('visible')
-      }
-      document.querySelector(".artist-img-space").addEventListener('click', toggleArtistMenu)
 
 
 // FONT ADJUSTMENT
@@ -533,21 +560,31 @@ async function fetchSpotifyUserId() {
 }
 
 async function createSpotifyPlaylist(userId, playlistName) {
-  const response = await fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${userAccessToken}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      name: playlistName,
-      description: 'Created from Graphify',
-      public: false
-    })
-  });
-  const data = await response.json();
-  return data.id;
+  try {
+    const response = await fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${userAccessToken}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: playlistName,
+        description: 'Created from Graphify',
+        public: false
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.id;
+  } catch (error) {
+    console.error('Error creating Spotify playlist:', error);
+  }
 }
+
 
 async function addTracksToPlaylist(playlistId, trackUris) {
   await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
