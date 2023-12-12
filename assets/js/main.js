@@ -296,6 +296,30 @@ document.querySelector(".playlist-space").addEventListener('click', togglePlayli
 
 
 
+function showShufflePopup() {
+  var popup = document.getElementById('shufflePopup');
+  if (!popup) {
+    popup = document.createElement('div');
+    popup.id = 'shufflePopup';
+    popup.textContent = 'playlist shuffled!';
+    document.body.appendChild(popup);
+  }
+
+  // Set initial opacity to 1 to show the popup
+  popup.style.opacity = '1';
+  popup.style.display = 'block';
+
+  // Wait 2 seconds before starting the fade out
+  setTimeout(function() {
+    popup.style.opacity = '0';
+  }, 1500);
+
+  // Hide the popup after fade out
+  setTimeout(function() {
+    popup.style.display = 'none';
+  }, 2500); // This should be the sum of the initial delay and the transition duration
+}
+
 
 // FONT ADJUSTMENT
 
@@ -744,4 +768,5 @@ function shuffleSongs() {
     }
   }
   updatePlaylist(); // refresh the playlist with songs
+  showShufflePopup();
 }

@@ -293,8 +293,26 @@ h1 {
       }
       
       #playlistNameInput {
-        margin-left: 7%; /* Adjust this value as needed to shift to the right */
+        margin-left: 7%; 
       }
+
+
+      #shufflePopup {
+        display: none; 
+        position: fixed; 
+        bottom: 80px; 
+        left: 50%; 
+        transform: translateX(-50%); 
+        padding: 10px;
+        background-color: rgb(30, 215, 96);
+        color: white; 
+        border-radius: 5px; 
+        z-index: 100; 
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2); 
+        opacity: 0; 
+        transition: opacity 0.5s ease; 
+      }
+      
       
       
       
