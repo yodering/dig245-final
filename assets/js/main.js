@@ -242,6 +242,11 @@ function closeAllMenus() {
 
 document.getElementById('shuffleButton').addEventListener('click', shuffleSongs);
 
+document.querySelector(".playlist-space").addEventListener('click', function(event) {
+  const sidebar = document.getElementById('side-bar');
+  sidebar.classList.toggle('slide-in');
+});
+
 
 function toggleHelpMenu() {
   const menu = document.getElementById('help-menu');
