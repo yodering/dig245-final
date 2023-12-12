@@ -271,6 +271,16 @@ h1 {
         padding: 5px 0;
       }
       
+      #imagesContainer img {
+        padding: 10px; 
+        border-radius: 50%; 
+        object-fit: cover; 
+      }
       
-      
+      #imagesContainer {
+        display: flex; 
+        flex-wrap: wrap; 
+        justify-content: center; 
+        align-items: center; 
+      }
       
