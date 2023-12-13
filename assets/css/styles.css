@@ -266,9 +266,11 @@ h1 {
 
 
 
-    #songList {
-    margin-top: 1rem; 
-    }
+  #songList {
+    overflow-y: auto; 
+    height: calc(100vh - 200px); 
+    width: 100%;
+  }
       
       #imagesContainer img {
         padding: 10px; 
@@ -297,7 +299,7 @@ h1 {
         right: 0;
         width: 365px;
         height: 100vh;
-        overflow-y: auto;
+        overflow-y: hidden;
         overflow-x: hidden;
         transform: translateX(101%);
         transition: transform 0.3s ease;
@@ -405,10 +407,11 @@ h1 {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%; /* This ensures the container takes the full width */
+  width: 100%;
   padding: 10px;
-  overflow-x: hidden;
 }
+
+
 
 
 
