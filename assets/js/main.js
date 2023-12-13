@@ -628,6 +628,49 @@ async function addTracksToPlaylist(playlistId, trackUris) {
   });
 }
 
+async function fetchUserProfile() {
+  if (!userAccessToken) {
+      console.error("User access token not available.");
+      return;
+  }
+
+  const response = await fetch('https://api.spotify.com/v1/me', {
+      headers: {
+          'Authorization': `Bearer ${userAccessToken}`
+      }
+  });
+
+  if (!response.ok) {
+      console.error("Failed to fetch user profile.");
+      return;
+  }
+
+  const userData = await response.json();
+  displayUserProfile(userData);
+}
+
+function displayUserProfile(userData) {
+  const userNameElement = document.getElementById('user-name');
+  const userImageElement = document.getElementById('user-image');
+
+  // Set the user's name
+  userNameElement.textContent = userData.display_name || 'Spotify User';
+
+  // Set the user's profile image, if available
+  if (userData.images && userData.images.length > 0) {
+      userImageElement.src = userData.images[0].url;
+      userImageElement.style.display = 'block';
+  } else {
+      userImageElement.style.display = 'none';
+  }
+}
+
+// Call this function after successfully retrieving the user access token
+if (userAccessToken) {
+  fetchUserProfile();
+}
+
+
 document.getElementById('savePlaylistButton').addEventListener('click', savePlaylistToSpotify);
 
 
