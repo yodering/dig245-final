@@ -1,86 +1,86 @@
-    <!doctype html>
-    <html lang="en">
-    <head>
-    <!-- meta tags, links to css, etc. -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png?">
-    <title>Graphify</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css&quot; rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    <link rel="stylesheet" href="assets/css/styles.css">
-    </head>
+<!doctype html>
+<html lang="en">
+<head>
+<!-- meta tags, links to css, etc. -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon.png?">
+<title>Graphify</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css&quot; rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
 
-    <body>
+<body>
 
-        <div class="container">
-            <nav>
-                <ul>
-                    <li class="user-space">Account</li>
-                    <li id="shuffleButton">Shuffle</li>
-                    <li class="playlist-space">Song List</li>
-                    <li class="artist-space">Artist List</li>
-                    <li class="question-mark-space">Help & Info</li>
-                </ul>
-            </nav>
-        </div>
-
-
-    <!-- visible content goes here -->
-
-    <div class="glass" id="artist-menu">
-        <h1>Current Artists in Playlist</h1>
-        <div class="menu-content">
-            <div id="imagesContainer"></div>
-        </div>
+    <div class="container">
+        <nav>
+            <ul>
+                <li class="user-space">Account</li>
+                <li id="shuffleButton">Shuffle</li>
+                <li class="playlist-space">Song List</li>
+                <li class="artist-space">Artist List</li>
+                <li class="question-mark-space">Help & Info</li>
+            </ul>
+        </nav>
     </div>
 
-    <div class="glass" id="help-menu">
-            <h1>Help and Info</h1>
-        <div class="menu-content">
-            <h2>Double click anywhere on screen to create a node! Enter an artist's name and click on the Song List tab to see their songs populate the list. Drag and drop the nodes, their distance from the central node determining the number of songs from that artist within the playlist. Right click on a node to delete. Click on Artist List to see what artists are in the playlist. Click on Shuffle to add variation to the playlist; new songs from each artist will populate the playlist. Click on the Account tab to link your Spotify account and to save the playlist to your library.</h2>
-            <h2>Graphify is a visual Spotify playlist generator based on a graph system; a central node with segments and user-chosen children nodes. The number of songs from the child node in the playlist is dependent on the distance of the node to the central node. The closer the node is to the central node, the greater number of songs there are. The further the distance, a lesser number of songs populate the playlist. Add up to 20 nodes! </h2>
-            <h2>Graphify is a visual Spotify playlist generator based on a graph system; a central node with segments and user-chosen children nodes. The number of songs from the child node in the playlist is dependent on the distance of the node to the central node. The closer the node is to the central node, the greater number of songs there are. The further the distance, a lesser number of songs populate the playlist. Add up to 20 nodes! </h2>
-        </div>
+
+<!-- visible content goes here -->
+
+<div class="glass" id="artist-menu">
+    <h1>Current Artists in Playlist</h1>
+    <div class="menu-content">
+        <div id="imagesContainer"></div>
     </div>
+</div>
 
-    <div class="glass" id="user-menu">
-        <h1>Spotify User Login</h1>
-        <div id="user-profile">
-            <img id="user-image" src="" alt="User Image" style="display: none; width: 100px; height: 100px;">
-            <p id="user-name"></p>
-        </div>
-        <div class="button-container">
-            <button class="glass-button" id="loginButton">Login with Spotify</button>
-            <button class="glass-button" id="savePlaylistButton">Save Playlist to Spotify</button>
-        </div>
+<div class="glass" id="help-menu">
+        <h1>Help and Info</h1>
+    <div class="menu-content">
+        <h2>Double click anywhere on screen to create a node! Enter an artist's name and click on the Song List tab to see their songs populate the list. Drag and drop the nodes, their distance from the central node determining the number of songs from that artist within the playlist. Right click on a node to delete. Click on Artist List to see what artists are in the playlist. Click on Shuffle to add variation to the playlist; new songs from each artist will populate the playlist. Click on the Account tab to link your Spotify account and to save the playlist to your library.</h2>
+        <h2>Graphify is a visual Spotify playlist generator based on a graph system; a central node with segments and user-chosen children nodes. The number of songs from the child node in the playlist is dependent on the distance of the node to the central node. The closer the node is to the central node, the greater number of songs there are. The further the distance, a lesser number of songs populate the playlist. Add up to 20 nodes! </h2>
+        <h2>Still have to type more..</h2>
     </div>
-    
+</div>
 
-
-    <div id="contextMenu" class="context-menu" style="display: none;">
-        <ul>
-        <li id="deleteNode">Delete Node</li>
-        </ul>
+ <div class="glass" id="user-menu">
+    <h1>Spotify User Login</h1>
+    <div id="user-profile">
+        <img id="user-image" src="" alt="User Image" style="width: 100px; height: 100px;">
+        <p id="user-name">Username</p>
     </div>
-    
-    <div class="side-bar" id="side-bar">
-        <div id="playlistContainer">
-            <h1>Playlist</h1>
-            <input type="text" id="playlistNameInput" placeholder="Enter Playlist Name">
-            <button id="setPlaylistName">Set Playlist Name</button>
-            <div id="songList"></div>
-        </div>
+    <div class="button-container">
+        <button class="glass-button" id="loginButton">Login with Spotify</button>
+        <button class="glass-button" id="savePlaylistButton">Save Playlist to Spotify</button>
     </div>
-
-    <svg id="graph"></svg>
-
-    
+</div>
 
 
-    <!-- load javascript after the page elements render -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/main.js"></script>
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-    </body>
-    </html>
+
+<div id="contextMenu" class="context-menu" style="display: none;">
+    <ul>
+    <li id="deleteNode">Delete Node</li>
+    </ul>
+</div>
+
+<div class="side-bar" id="side-bar">
+    <div class="playlistContainer" id="playlistContainer">
+        <h1>Playlist</h1>
+        <input class="playlistNameInput" type="text" id="playlistNameInput" placeholder="Enter Playlist Name">
+        <button  class="glass-button" id="setPlaylistName">Set Playlist Name</button>
+        <div id="songList"></div>
+    </div>
+</div>
+
+<svg id="graph"></svg>
+
+
+
+
+<!-- load javascript after the page elements render -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/main.js"></script>
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>

@@ -360,18 +360,23 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 async function handleAuthRedirect() {
-  const queryString = window.location.search;
-  console.log("Query string received:", queryString);
+    const queryString = window.location.search;
+    console.log("Query string received:", queryString);
 
-  const urlParams = new URLSearchParams(queryString);
-  const code = urlParams.get('code');
-  console.log("Authorization code:", code);
+    const urlParams = new URLSearchParams(queryString);
+    const code = urlParams.get('code');
+    console.log("Authorization code:", code);
 
-  if (code) {
-      userAccessToken = await exchangeCodeForToken(code);
-      console.log("User access token:", userAccessToken);
-  }
+    if (code) {
+        userAccessToken = await exchangeCodeForToken(code);
+        console.log("User access token:", userAccessToken);
+
+        if (userAccessToken) {
+            fetchUserProfile(); 
+        }
+    }
 }
+
 
 
 async function exchangeCodeForToken(code) {
@@ -395,7 +400,7 @@ function spotifyLogin() {
   const scope = 'playlist-modify-public playlist-modify-private';
   const authUrl = `https://accounts.spotify.com/authorize?client_id=${string2}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scope)}`;
 
-  // redirect current window to Spotify login
+  // redirect current window to spotify login
   window.location.href = authUrl;
 
 }
@@ -629,46 +634,41 @@ async function addTracksToPlaylist(playlistId, trackUris) {
 }
 
 async function fetchUserProfile() {
-  if (!userAccessToken) {
-      console.error("User access token not available.");
-      return;
-  }
+    if (!userAccessToken) {
+        return;
+    }
 
-  const response = await fetch('https://api.spotify.com/v1/me', {
-      headers: {
-          'Authorization': `Bearer ${userAccessToken}`
-      }
-  });
+    const response = await fetch('https://api.spotify.com/v1/me', {
+        headers: {
+            'Authorization': `Bearer ${userAccessToken}`
+        }
+    });
 
-  if (!response.ok) {
-      console.error("Failed to fetch user profile.");
-      return;
-  }
-
-  const userData = await response.json();
-  displayUserProfile(userData);
+    const userData = await response.json();
+    displayUserProfile(userData);
 }
 
 function displayUserProfile(userData) {
-  const userNameElement = document.getElementById('user-name');
-  const userImageElement = document.getElementById('user-image');
+    const userNameElement = document.getElementById('user-name');
+    const userImageElement = document.getElementById('user-image');
 
-  // Set the user's name
-  userNameElement.textContent = userData.display_name || 'Spotify User';
+    console.log("Displaying user profile. User data:", userData);
 
-  // Set the user's profile image, if available
-  if (userData.images && userData.images.length > 0) {
-      userImageElement.src = userData.images[0].url;
-      userImageElement.style.display = 'block';
-  } else {
-      userImageElement.style.display = 'none';
-  }
+    // set the user's name
+    userNameElement.textContent = userData.display_name || 'Spotify User';
+    console.log("User name set to:", userNameElement.textContent);
+
+    // set the user's profile image, if available
+    if (userData.images && userData.images.length > 0) {
+        userImageElement.src = userData.images[0].url;
+        userImageElement.style.display = 'block';
+        console.log("User image set to:", userData.images[0].url);
+    } else {
+        userImageElement.style.display = 'none';
+        console.log("User image not available. Hiding image element.");
+    }
 }
 
-// Call this function after successfully retrieving the user access token
-if (userAccessToken) {
-  fetchUserProfile();
-}
 
 
 document.getElementById('savePlaylistButton').addEventListener('click', savePlaylistToSpotify);
