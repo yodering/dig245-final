@@ -11,6 +11,14 @@ h3 {
   font-family:'rubik', sans-serif;
   }
 
+h2 {
+  font-family:'rubik', sans-serif;
+  color:white;
+  text-align:left;
+  font-size: 15px;
+  padding:2%;
+}
+
 h1 {
   font-family:'rubik', sans-serif;
   color:white;
@@ -269,7 +277,7 @@ h1 {
         top: 0;
         right: 0;
         width: 365px;
-        max-height: 100vh;
+        height: 100vh;
         overflow-y: auto;
         transform: translateX(101%);
         transition: transform 0.3s ease;
