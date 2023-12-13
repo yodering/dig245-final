@@ -380,20 +380,19 @@ h1 {
 
       
 .playlistNameInput {
-  background-color: #f9f9f9; 
-  color: black; 
-  padding: 10px 20px; 
-  border-radius: 30px; 
-  border: 2px solid transparent; 
-  font-size: 16px; 
-  font-family: "rubik", sans-serif; 
-  transition: border-color 0.5s, box-shadow 0.5s; 
-  width: calc(100% - 40px); 
+  background-color: #f9f9f9;
+  color: black;
+  padding: 10px 20px;
+  border-radius: 30px;
+  border: 2px solid transparent;
+  font-size: 16px;
+  font-family: "rubik", sans-serif;
+  transition: border-color 0.5s, box-shadow 0.5s;
+  width: 60%; 
   box-sizing: border-box;
-  margin-bottom: 10px; 
-  width: 60%;
+  position:relative;
+  right: 3%;
 }
-
 
 .playlistNameInput:focus, .playlistNameInput:hover {
   border-color: rgb(30, 215, 96); 
@@ -402,12 +401,12 @@ h1 {
 }
 
 .playlistContainer {
-  display: flex; 
-  flex-direction: column; 
-  align-items: center; 
-  justify-content: center; 
-  width: 100%; 
-  padding: 10px; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%; /* This ensures the container takes the full width */
+  padding: 10px;
   overflow-x: hidden;
 }
 

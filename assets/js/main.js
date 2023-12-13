@@ -10,16 +10,25 @@ let displayedSongsMap = {};
 
 document.addEventListener('DOMContentLoaded', function () {
 
-  const setPlaylistNameButton = document.getElementById('setPlaylistName');
   const playlistNameInput = document.getElementById('playlistNameInput');
   const playlistHeader = document.querySelector('#playlistContainer h1'); // select the playlist header
-
-  setPlaylistNameButton.addEventListener('click', function() {
-      const playlistName = playlistNameInput.value;
-      if (playlistName) {
-          playlistHeader.textContent = playlistName; // update the playlist header user entered name
+  
+  playlistNameInput.addEventListener('keyup', function(event) {
+      if (event.key === 'Enter') {
+          updatePlaylistName();
       }
   });
+  
+  // clicking out of the input field
+  playlistNameInput.addEventListener('blur', updatePlaylistName);
+  
+  function updatePlaylistName() {
+      const playlistName = playlistNameInput.value.trim();
+      if (playlistName) {
+          playlistHeader.textContent = playlistName; // update the playlist header with the user-entered name
+      }
+  }
+  
 
 
   svg = document.getElementById('graph');
