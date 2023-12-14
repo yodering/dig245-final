@@ -598,11 +598,11 @@ function showSavePopup(message) {
 
   setTimeout(function() {
     popup.style.opacity = '0';
-  }, 1500);
+  }, 3000);
 
   setTimeout(function() {
     popup.style.display = 'none';
-  }, 15000);
+  }, 4000);
 }
 
 
