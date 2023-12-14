@@ -1,4 +1,3 @@
-//GRAPH JS
 let artistSongsMap = {};
 let svg;
 let selectedNode = null;
@@ -6,6 +5,7 @@ let offset = {x: 0, y: 0};
 let nodeIdCounter = 0;
 let displayedSongsMap = {};
 
+//GRAPH JS
 
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -118,7 +118,7 @@ async function nodeDoubleClick({ circle, text }) {
   document.body.appendChild(input);
   input.focus();
 
-  input.setAttribute('data-for-node', circle.getAttribute('data-node-id')); // Link input box to node
+  input.setAttribute('data-for-node', circle.getAttribute('data-node-id')); // link input box to node
 
   input.addEventListener('keydown', async function(e) {
     if (e.key === 'Enter') {
@@ -134,10 +134,9 @@ async function nodeDoubleClick({ circle, text }) {
         parseFloat(centralNode.getAttribute('cy'))
       );
       const songsCount = getSongsCount(distance); // get the songs count based on the distance
-      console.log(`Distance: ${distance}, Songs Count: ${songsCount}`); // Debugging line
+      console.log(`Distance: ${distance}, Songs Count: ${songsCount}`); 
   
-      // Fetch the artist data and songs
-      const artistId = await handleArtistData(input.value, songsCount, circle);
+      const artistId = await handleArtistData(input.value, songsCount, circle); // fetch the artist data and songs
       if (artistId) {
         circle.setAttribute('data-artist-id', artistId);
       }
@@ -185,8 +184,7 @@ async function nodeDoubleClick({ circle, text }) {
 
   function endDrag() {
     if (selectedNode) {
-      // recalculate the distance and adjust the number of songs
-      updateSongs(selectedNode);
+      updateSongs(selectedNode); // recalculate the distance and adjust the number of songs
       selectedNode = null;
     }
     svg.removeEventListener('mousemove', drag);
@@ -220,6 +218,8 @@ document.addEventListener('click', function(event) {
 
 });
 
+// GRAPH JS END
+
 function updateSongs(node) {
   const artistName = node.nextSibling.textContent;
   if (artistName && artistSongsMap[artistName]) {
@@ -237,16 +237,15 @@ function updateSongs(node) {
 
 
 
+// UI FUNCTIONS
+
+
 function closeAllMenus() {
   const menus = document.querySelectorAll('.glass');
   menus.forEach(menu => {
     menu.classList.remove('visible');
   });
 }
-
-
-
-
 
 
 document.getElementById('shuffleButton').addEventListener('click', shuffleSongs);
@@ -313,24 +312,20 @@ function showShufflePopup() {
     popup.textContent = 'playlist shuffled!';
     document.body.appendChild(popup);
   }
-
-  // Set initial opacity to 1 to show the popup
   popup.style.opacity = '1';
   popup.style.display = 'block';
 
-  // Wait 2 seconds before starting the fade out
-  setTimeout(function() {
+  setTimeout(function() { // wait before fade
     popup.style.opacity = '0';
   }, 1500);
 
-  // Hide the popup after fade out
-  setTimeout(function() {
+  setTimeout(function() { // hide the popup after fade out
     popup.style.display = 'none';
-  }, 2500); // This should be the sum of the initial delay and the transition duration
+  }, 2000); 
 }
 
 
-// FONT ADJUSTMENT
+//UI FUNCTIONS END
 
 
 
@@ -338,8 +333,6 @@ function showShufflePopup() {
 function calculateDistance(x1, y1, x2, y2) {
   return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
 }
-
-
 
 const MAX_DISTANCE = 900; // min distance at which the min number of songs is shown
 const MIN_DISTANCE = 200; // min distance at which the maxnumber of songs is shown
@@ -356,6 +349,10 @@ function getSongsCount(distance) {
 
   return Math.min(Math.max(songsCount, MIN_SONGS), MAX_SONGS); // ensure the songs count is within the bounds
 }
+
+// DISTANCE CALCULATION END
+
+// SPOTIFY JS
 
 
 const string1 = 'ed2ae0fa7d99436d9c5cd5d11243f00c';
@@ -531,7 +528,7 @@ async function fetchAlbumArt(albumId) {
 async function displayImage(token, artistId, artistName) {
   const imagesContainer = document.getElementById('imagesContainer'); // get the container where images will be displayed
   let artistImage = imagesContainer.querySelector(`#artist-image-${artistId}`);
-  if (!artistImage) { // fetch artist image data from Spotify API
+  if (!artistImage) { // fetch artist image data from spotify api
     const imageResponse = await fetch(`https://api.spotify.com/v1/artists/${artistId}`, {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -555,42 +552,60 @@ async function displayImage(token, artistId, artistName) {
 
 
 async function savePlaylistToSpotify() {
-  // check for user access token
-  if (!userAccessToken) {
+  if (!userAccessToken) { // check for user access token
     console.log('No user access token found.');
-    alert('Please log in to Spotify first.');
+    showAlertPopup('Please log in to Spotify first.');
     return;
   }
   console.log('User access token is available.');
 
-  // get the user's Spotify ID
-  const userId = await fetchSpotifyUserId();
+  const userId = await fetchSpotifyUserId(); // get the user's Spotify ID
   console.log(`Fetched Spotify user ID: ${userId}`);
 
-  // get the playlist name from the input field
-  const playlistName = document.getElementById('playlistNameInput').value || 'My New Playlist';
+  const playlistName = document.getElementById('playlistNameInput').value || 'My New Playlist'; // get the playlist name from the input field
   console.log(`Playlist Name: ${playlistName}`);
 
-  // create playlist
-  const playlistId = await createSpotifyPlaylist(userId, playlistName);
+  const playlistId = await createSpotifyPlaylist(userId, playlistName); // create playlist
   console.log(`Created playlist with ID: ${playlistId}`);
 
-  // collect track URIs
-  const trackUris = [];
-    for (const songs of Object.values(displayedSongsMap)) {
-        for (const song of songs) {
-            trackUris.push(song.uri);
-        }
+  const trackUris = []; // collect track URIs
+  for (const songs of Object.values(displayedSongsMap)) {
+    for (const song of songs) {
+        trackUris.push(song.uri);
     }
+  }
   console.log('Track URIs collected:', trackUris);
 
-  // add tracks to the new playlist
-  await addTracksToPlaylist(playlistId, trackUris);
+  await addTracksToPlaylist(playlistId, trackUris); // add tracks to the new playlist
   console.log('Tracks added to the playlist.');
 
-  alert(`Playlist '${playlistName}' saved to your Spotify account!`);
+  showSavePopup(`playlist '${playlistName}' saved to your Spotify account!`);
   console.log(`Playlist '${playlistName}' saved to the user's Spotify account.`);
 }
+
+function showSavePopup(message) {
+  var popup = document.getElementById('savePopup');
+  if (!popup) {
+    popup = document.createElement('div');
+    popup.id = 'savePopup';
+    popup.textContent = message;
+    document.body.appendChild(popup);
+  } else {
+    popup.textContent = message;
+  }
+  popup.style.opacity = '1';
+  popup.style.display = 'block';
+
+  setTimeout(function() {
+    popup.style.opacity = '0';
+  }, 1500);
+
+  setTimeout(function() {
+    popup.style.display = 'none';
+  }, 2000);
+}
+
+
 
 async function fetchSpotifyUserId() {
   const response = await fetch('https://api.spotify.com/v1/me', {
@@ -601,6 +616,7 @@ async function fetchSpotifyUserId() {
   const data = await response.json();
   return data.id;
 }
+
 
 async function createSpotifyPlaylist(userId, playlistName) {
   try {
@@ -663,12 +679,10 @@ function displayUserProfile(userData) {
 
     console.log("Displaying user profile. User data:", userData);
 
-    // set the user's name
-    userNameElement.textContent = userData.display_name || 'Spotify User';
+    userNameElement.textContent = userData.display_name || 'Spotify User'; // set the user's name
     console.log("User name set to:", userNameElement.textContent);
 
-    // set the user's profile image, if available
-    if (userData.images && userData.images.length > 0) {
+    if (userData.images && userData.images.length > 0) { // set the user's profile image
         userImageElement.src = userData.images[0].url;
         userImageElement.style.display = 'block';
         console.log("User image set to:", userData.images[0].url);
@@ -680,9 +694,13 @@ function displayUserProfile(userData) {
 
 
 
+
+
 document.getElementById('savePlaylistButton').addEventListener('click', savePlaylistToSpotify);
 
 
+
+//SPOTIFY JS END
 
 //COLOR
 
@@ -708,7 +726,7 @@ function updateHoverColor(node) {
   node.style.setProperty('--hover-color', hoverColor); // css variable
 }
 
-
+// COLOR END
 
 
 //DELETE NODE
@@ -775,6 +793,10 @@ function updatePlaylist() {
   });
 }
 
+// DELETE NODE END
+
+//CONTEXT MENU
+
 function showContextMenu(x, y, node, event) {
   event.preventDefault();
   const menu = document.getElementById('contextMenu');
@@ -798,6 +820,10 @@ document.addEventListener('click', function(event) {
     menu.style.display = 'none';
   }
 });
+
+
+// CONTEXT MENU END
+
 
 
 // SHUFFLE SONGS
