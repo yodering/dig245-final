@@ -579,7 +579,7 @@ async function savePlaylistToSpotify() {
   await addTracksToPlaylist(playlistId, trackUris); // add tracks to the new playlist
   console.log('Tracks added to the playlist.');
 
-  showSavePopup(`playlist '${playlistName}' saved to your Spotify account!`);
+  showSavePopup(`'${playlistName}' has been saved to your Spotify account!`);
   console.log(`Playlist '${playlistName}' saved to the user's Spotify account.`);
 }
 
@@ -602,7 +602,7 @@ function showSavePopup(message) {
 
   setTimeout(function() {
     popup.style.display = 'none';
-  }, 4000);
+  }, 15000);
 }
 
 
