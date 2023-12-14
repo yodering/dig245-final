@@ -554,7 +554,7 @@ async function displayImage(token, artistId, artistName) {
 async function savePlaylistToSpotify() {
   if (!userAccessToken) { // check for user access token
     console.log('No user access token found.');
-    showAlertPopup('Please log in to Spotify first.');
+    alert('Please log in to Spotify first!');
     return;
   }
   console.log('User access token is available.');
@@ -602,7 +602,7 @@ function showSavePopup(message) {
 
   setTimeout(function() {
     popup.style.display = 'none';
-  }, 2000);
+  }, 4000);
 }
 
 
@@ -628,7 +628,7 @@ async function createSpotifyPlaylist(userId, playlistName) {
       },
       body: JSON.stringify({
         name: playlistName,
-        description: 'Created from Graphify',
+        description: 'Created with Graphify',
         public: false
       })
     });
