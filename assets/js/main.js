@@ -94,12 +94,12 @@ svg.addEventListener('dblclick', function (event) {
   const x = event.clientX - rect.left;
   const y = event.clientY - rect.top;
   if (!event.target.classList.contains('node')) { // avoid creating a node on the central node
-      if (nodeIdCounter < 20) {  // check if the limit has been reached
+      if (nodeIdCounter < 15) {  // check if the limit has been reached
           const newNode = createNode(x, y, false);
           nodeDoubleClick(newNode);
       } else {
           // display a message to the user that the node limit has been reached
-          alert("Maximum of 20 nodes reached.");
+          alert("Maximum of 15 nodes reached.");
       }
   }
 });
