@@ -10,6 +10,14 @@ let displayedSongsMap = {};
 
 document.addEventListener('DOMContentLoaded', function () {
 
+  function openHelpMenu() {
+    const helpMenu = document.getElementById('help-menu');
+    helpMenu.classList.add('visible'); // Add a CSS class to make it visible
+  }
+
+ 
+  openHelpMenu(); // open help menu on load
+
   const playlistNameInput = document.getElementById('playlistNameInput');
   const playlistHeader = document.querySelector('#playlistContainer h1'); // select the playlist header
   
