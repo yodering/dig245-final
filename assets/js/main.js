@@ -263,6 +263,11 @@ document.querySelector(".playlist-space").addEventListener('click', function(eve
   sidebar.classList.toggle('slide-in');
 });
 
+document.getElementById("x").addEventListener('click', function(event) {
+  const sidebar = document.getElementById('side-bar');
+  sidebar.classList.toggle('slide-in');
+});
+
 
 function toggleHelpMenu() {
   const menu = document.getElementById('help-menu');
@@ -294,21 +299,12 @@ function toggleArtistMenu() {
   }
 }
 
-function togglePlaylistMenu() {
-  const sidebar = document.getElementById('side-bar');
-  if (sidebar.classList.contains('visible')) {
-    sidebar.classList.remove('visible');
-  } else {
-    closeAllMenus();
-    sidebar.classList.add('visible');
-  }
-}
+
 
 
 document.querySelector(".question-mark-space").addEventListener('click', toggleHelpMenu);
 document.querySelector(".user-space").addEventListener('click', toggleAccountMenu);
 document.querySelector(".artist-space").addEventListener('click', toggleArtistMenu);
-document.querySelector(".playlist-space").addEventListener('click', togglePlaylistMenu);
 
 
 
@@ -856,3 +852,9 @@ function shuffleSongs() {
   updatePlaylist(); // refresh the playlist with songs
   showShufflePopup();
 }
+
+document.querySelectorAll('.close-btn').forEach(function(btn) {
+  btn.onclick = function() {
+      this.parentElement.classList.remove('visible');
+  };
+});

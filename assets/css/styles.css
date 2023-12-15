@@ -241,7 +241,7 @@ h1 {
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      border-radius: 50px;
+      border-radius: 30px;
       transition: opacity 0.3s, visibility 0.2s;
       box-shadow: 0 25px 45px rgba(0, 0, 0, .2);
       border: 2px solid rgba(255, 255, 255, .2);
@@ -267,6 +267,19 @@ h1 {
   }
   
       
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 30px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    color: rgb(30, 215, 96);
+}
 
 
 
